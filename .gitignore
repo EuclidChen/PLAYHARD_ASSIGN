@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+.env
+*.json
+
+# VSCode / PyCharm
+.vscode/
+.idea/
+
+# Streamlit Cloud 不需本地虛擬環境
+venv/
+.env/
