@@ -87,7 +87,8 @@ def make_summary_df(year: int, month: int):
             return "background-color:#fff9db"
         return ""
 
-    return df.style.applymap(color, subset=pd.IndexSlice[:, 2:])
+    styler = df.style.applymap(color, subset=pd.IndexSlice[:, df.columns[2:]])
+    return styler
 
 
 # ---------- 4. 登入 ---------- #
