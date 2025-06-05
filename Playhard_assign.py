@@ -77,6 +77,11 @@ st.markdown("""
   #cal-area li[role="option"]{ font-size:10px!important }
   #cal-area svg{ width:12px!important; height:12px!important }
 }
+@media (max-width:480px) and (orientation:portrait){
+  #cal-area{ overflow-x:auto; padding-bottom:6px }
+  #cal-area div[data-testid="stColumns"]{ flex-wrap:nowrap!important; gap:2px!important }
+  #cal-area div[data-testid="column"]{ flex:0 0 70px!important; max-width:70px!important }
+}
 </style>
 """, unsafe_allow_html=True)
 
