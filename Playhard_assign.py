@@ -38,64 +38,64 @@ st.markdown(
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-/* ========= 桌機 (預設) ========= */
+
+/* ===== 桌機 (預設) ===== */
 #cal-area div[data-testid="column"]{
   flex:1 1 70px !important;
   max-width:70px !important;
 }
 
-/* ========= 手機直向 ========= */
+/* ===== 手機直向：橫向滑動 ===== */
 @media (max-width:480px) and (orientation:portrait){
-  :root{ --colw: 64px; }                 /* 每格固定 64px，7格≈448px > 螢幕 */
+  :root{ --colw:64px }                               /* 每格 64px */
 
   #cal-area{
-      overflow-x:auto;                   /* 這層就能滑 */
-      -webkit-overflow-scrolling:touch;  /* 惯性捲動 */
-      padding-bottom:6px;
+    overflow-x:auto; -webkit-overflow-scrolling:touch;
+    padding-bottom:6px;
   }
-
-  #cal-area div[data-testid="stColumns"]{
-      min-width:calc(7 * var(--colw) + 12px);   /* 關鍵 ➜ 整列比手機寬 */
-      flex-wrap:nowrap!important;
-      gap:2px!important;
+  /* 每一列（日曆 row）不允許換行，寬度 > 螢幕 */
+  #cal-area div[data-testid="stHorizontalBlock"]{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    min-width:calc(7 * var(--colw) + 12px);          /* 7格 + gap */
+    gap:2px !important;
   }
-
+  /* 單格 */
   #cal-area div[data-testid="column"]{
-      flex:0 0 var(--colw)!important;
-      max-width:var(--colw)!important;
-      padding-left:1px!important; padding-right:1px!important;
+    flex:0 0 var(--colw)!important;
+    max-width:var(--colw)!important;
+    padding-left:1px!important; padding-right:1px!important;
   }
-
   #cal-area div.calendar-date{ font-size:12px!important; padding:2px 0 }
   #cal-area div[role="combobox"]{ font-size:11px!important; min-height:24px!important }
 }
 
-/* ========= 手機橫向 ========= */
+/* ===== 手機橫向：7 等分 + 不截字 ===== */
 @media (max-width:480px) and (orientation:landscape){
-  :root{ --colw: calc((100vw - 12px) / 7); }
+  :root{ --colw:calc((100vw - 12px)/7) }
 
-  #cal-area div[data-testid="stColumns"]{ gap:2px !important; }
+  #cal-area div[data-testid="stHorizontalBlock"]{ gap:2px!important }
   #cal-area div[data-testid="column"]{
-    flex:0 0 var(--colw) !important;
-    max-width:var(--colw) !important;
-    padding-left:1px !important; padding-right:1px !important;
+    flex:0 0 var(--colw)!important;
+    max-width:var(--colw)!important;
+    padding-left:1px!important; padding-right:1px!important;
   }
-
-  /* 下拉框加寬 16px，字 10px，取消省略號 */
+  /* 加寬 select + 10px 字體 */
   #cal-area div[data-baseweb="select"]{
-    width:calc(100% + 16px) !important;
-    margin-left:-8px !important; margin-right:-8px !important;
+    width:calc(100% + 16px)!important;
+    margin-left:-8px!important; margin-right:-8px!important;
   }
   #cal-area div[role="combobox"]{
-    font-size:10px !important;
-    padding-left:4px !important; padding-right:24px !important;
-    white-space:nowrap !important; overflow:visible !important; text-overflow:clip !important;
+    font-size:10px!important;
+    padding-left:4px!important; padding-right:24px!important;
+    white-space:nowrap!important; overflow:visible!important; text-overflow:clip!important;
   }
-  #cal-area li[role="option"]{ font-size:10px !important; }
-  #cal-area svg{ width:12px !important; height:12px !important; }
+  #cal-area li[role="option"]{ font-size:10px!important }
+  #cal-area svg{ width:12px!important; height:12px!important }
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 
 # ---------- 3. 產生總表 Styler ---------- #
