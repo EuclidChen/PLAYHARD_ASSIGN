@@ -38,24 +38,38 @@ st.markdown(
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-/* ===== 手機版（<=480px）一次顯示整個月 ===== */
-@media (max-width:480px){
-  /* 1. 7 等分：calc(100vw / 7)；減去左右 padding 32px 再平均 */
+/* ===== 手機直向：7 等分 + 小字 ===== */
+@media (max-width:480px) and (orientation:portrait){
+  :root{ --colw: calc((100vw - 32px) / 7); }          /* 等分寬 */
+
+  div[data-testid="column"]{
+     flex:0 0 var(--colw)!important;
+     max-width:var(--colw)!important;
+     padding-left:1px!important; padding-right:1px!important;
+  }
+
+  div.calendar-date{ font-size:13px!important; padding:2px 0 }
+  div[data-testid="stSelectbox"]>div{
+     font-size:12px!important; min-height:26px!important;
+  }
+
+  div[data-testid="stColumns"]{ gap:2px!important }
+}
+
+/* ===== 手機橫向：維持 7 等分，進一步縮 selectbox 字 ===== */
+@media (max-width:480px) and (orientation:landscape){
   :root{ --colw: calc((100vw - 32px) / 7); }
 
   div[data-testid="column"]{
-     flex: 0 0 var(--colw)!important;
-     max-width: var(--colw)!important;
-     padding-left:1px!important;
-     padding-right:1px!important;
+     flex:0 0 var(--colw)!important;
+     max-width:var(--colw)!important;
   }
 
-  /* 2. 日期字 & selectbox 縮小 */
-  div.calendar-date{ font-size:13px!important; padding:2px 0 }
-  div[data-testid="stSelectbox"]>div{ font-size:12px!important; min-height:26px!important }
+  div[data-testid="stSelectbox"]>div{
+     font-size:9px!important; min-height:24px!important;
+  }
 
-  /* 3. 行間距微縮，畫面更緊湊 */
-  div[data-testid="stColumns"]{ gap:2px!important }
+  div.calendar-date{ font-size:11px!important; }
 }
 </style>
 """, unsafe_allow_html=True)
