@@ -56,20 +56,25 @@ st.markdown("""
   div[data-testid="stColumns"]{ gap:2px!important }
 }
 
-/* ===== 手機橫向：維持 7 等分，進一步縮 selectbox 字 ===== */
+/* ===== 手機橫向：把 selectbox 寬度往左右各撐 8px ===== */
 @media (max-width:480px) and (orientation:landscape){
-  :root{ --colw: calc((100vw - 32px) / 7); }
-
-  div[data-testid="column"]{
-     flex:0 0 var(--colw)!important;
-     max-width:var(--colw)!important;
+  /* 1. 讓最外層 combobox 寬度 > 欄位寬度，並左右回負 margin 對齊 */
+  div[data-baseweb="select"]{
+     width: calc(100% + 16px) !important;   /* 欄寬 + 16px */
+     margin-left: -8px !important;
+     margin-right:-8px !important;
   }
 
-  div[data-testid="stSelectbox"]>div{
-     font-size:4px!important; min-height:24px!important;
+  /* 2. 文字保持 12px，padding 略縮，確保 still clickable */
+  div[data-baseweb="select"] div[role="combobox"]{
+     font-size:12px !important;
+     padding-left:4px !important;
+     padding-right:28px !important;   /* 給箭頭位置 */
+     text-overflow:clip !important;    /* 不要出現… */
   }
 
-  div.calendar-date{ font-size:11px!important; }
+  /* 3. 下拉清單同步字級 */
+  li[role="option"]{ font-size:12px !important; }
 }
 </style>
 """, unsafe_allow_html=True)
