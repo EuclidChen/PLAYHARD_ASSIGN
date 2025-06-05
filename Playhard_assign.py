@@ -38,41 +38,75 @@ st.markdown(
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-/* ===== 手機直向：7 等分 + 小字 ===== */
-@media (max-width:480px) and (orientation:portrait){
-  :root{ --colw: calc((100vw - 32px) / 7); }          /* 等分寬 */
+/* ================= 桌　機（預設） ================= */
+/* 不寫任何特別規則 → 維持 70px × 7 欄 */
 
-  div[data-testid="column"]{
-     flex:0 0 var(--colw)!important;
-     max-width:var(--colw)!important;
-     padding-left:1px!important; padding-right:1px!important;
-  }
-
-  div.calendar-date{ font-size:13px!important; padding:2px 0 }
-  div[data-testid="stSelectbox"]>div{
-     font-size:12px!important; min-height:26px!important;
-  }
-
-  div[data-testid="stColumns"]{ gap:2px!important }
+div[data-testid="column"]{               /* 這條只影響桌機 */
+   flex:1 1 70px!important;
+   max-width:70px!important;
 }
 
-/* ===== 手機橫向：維持 7 等分，進一步縮 selectbox 字 ===== */
-@media (max-width:480px) and (orientation:landscape){
-  :root{ --colw: calc((100vw - 32px) / 7); }
+/* ================= 手機直向 ================= */
+@media (max-width:480px) and (orientation:portrait){
 
+  /* 0. 取消 Streamlit body 兩側 padding，讓畫面滿版 */
+  section.main > div:first-child{
+      padding-left:4px!important; padding-right:4px!important;
+  }
+
+  /* 1. 讓每格寬度 = (螢幕寬 － 8px gap) / 7 */
+  :root{ --colw: calc((100vw - 12px) / 7) }
+
+  /* 2. 套用到日曆欄格 */
+  div[data-testid="stColumns"]{ gap:2px!important }       /* 一列 gap 2px */
   div[data-testid="column"]{
-     flex:0 0 var(--colw)!important;
-     max-width:var(--colw)!important;
+      flex:0 0 var(--colw)!important;
+      max-width:var(--colw)!important;
+      padding-left:1px!important; padding-right:1px!important;
   }
 
-  div[data-testid="stSelectbox"]>div{
-     font-size:20px!important; min-height:24px!important;
+  /* 3. 日期字、下拉字縮小 */
+  div.calendar-date{ font-size:12px!important; padding:2px 0 }
+  div[data-baseweb="select"] div[role="combobox"]{
+       font-size:11px!important; min-height:24px!important;
+  }
+}
+
+/* ================= 手機橫向 ================= */
+@media (max-width:480px) and (orientation:landscape){
+
+  :root{ --colw: calc((100vw - 12px) / 7) }
+  div[data-testid="stColumns"]{ gap:2px!important }
+  div[data-testid="column"]{
+      flex:0 0 var(--colw)!important;
+      max-width:var(--colw)!important;
+      padding-left:1px!important; padding-right:1px!important;
   }
 
-  div.calendar-date{ font-size:11px!important; }
+  /* --- 擴寬下拉框 16px（左右各 8px），防止省略號 --- */
+  div[data-baseweb="select"]{
+      width:calc(100% + 16px)!important;
+      margin-left:-8px!important; margin-right:-8px!important;
+  }
+
+  /* combobox 文字 10px、顯示完整字 */
+  div[data-baseweb="select"] div[role="combobox"]{
+      font-size:10px!important;
+      padding-left:4px!important; padding-right:24px!important;
+      white-space:nowrap!important;
+      overflow:visible!important;
+      text-overflow:clip!important;
+  }
+
+  /* 下拉清單同步字級 */
+  div[data-baseweb="select"] li[role="option"]{ font-size:10px!important }
+
+  /* 箭頭 icon 略縮 */
+  div[data-baseweb="select"] svg{ width:12px!important; height:12px!important }
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 # ---------- 3. 產生總表 Styler ---------- #
 def make_summary_df(year: int, month: int):
