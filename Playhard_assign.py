@@ -45,10 +45,14 @@ st.markdown("""
 @media (max-width:768px) {
   #cal-area {
     display: block !important;
-    overflow-x: auto;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 8px;
     white-space: nowrap;
+  }
+  #cal-area > div {
+    display: inline-block !important;
+    vertical-align: top;
   }
   #cal-area div[data-testid="stHorizontalBlock"] {
     display: flex !important;
