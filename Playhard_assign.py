@@ -41,38 +41,33 @@ st.markdown("""
 /* ===== 桌機 ===== */
 #cal-area div[data-testid="column"]{ flex:1 1 70px!important; max-width:70px!important; }
 
-/* ===== 手機直向：橫向滑動強化版 ===== */
+/* ===== 手機直向：橫向滑動全行維持在一列 ===== */
 @media (max-width:768px) {
   #cal-area {
-    display: block !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 8px;
-    white-space: nowrap;
   }
-  #cal-area > div {
-    display: inline-block !important;
-    vertical-align: top;
-  }
-  #cal-area div[data-testid="stHorizontalBlock"] {
+  #cal-area .stHorizontalBlock {
     display: flex !important;
     flex-wrap: nowrap !important;
-    gap: 4px !important;
-    min-width: calc(7 * 72px + 20px);
+    gap: 2px !important;
+    min-width: 520px; /* 寬度略寬一週 */
   }
   #cal-area [data-testid="column"] {
-    flex: 0 0 72px !important;
-    max-width: 72px !important;
-    min-width: 72px !important;
+    flex: 0 0 68px !important;
+    max-width: 68px !important;
+    min-width: 68px !important;
   }
   #cal-area div[role="combobox"] {
-    font-size: 12px !important;
+    font-size: 13px !important;
     min-height: 24px !important;
     width: 100% !important;
   }
   #cal-area div.calendar-date {
     font-size: 13px !important;
     padding: 3px 0 !important;
+    text-align: center;
   }
 }
 
