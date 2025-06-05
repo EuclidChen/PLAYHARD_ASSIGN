@@ -50,7 +50,7 @@ st.markdown("""
     padding-bottom: 8px;
     white-space: nowrap;
   }
-  #cal-area .stHorizontalBlock {
+  #cal-area div[data-testid="stHorizontalBlock"] {
     display: flex !important;
     flex-wrap: nowrap !important;
     gap: 4px !important;
@@ -64,6 +64,7 @@ st.markdown("""
   #cal-area div[role="combobox"] {
     font-size: 12px !important;
     min-height: 24px !important;
+    width: 100% !important;
   }
   #cal-area div.calendar-date {
     font-size: 13px !important;
