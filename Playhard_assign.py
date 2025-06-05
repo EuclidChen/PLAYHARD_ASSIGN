@@ -38,60 +38,46 @@ st.markdown(
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-
-/* ===== 桌機 (預設) ===== */
-#cal-area div[data-testid="column"]{
-  flex:1 1 70px !important;
-  max-width:70px !important;
-}
+/* ===== 桌機 ===== */
+#cal-area div[data-testid="column"]{ flex:1 1 70px!important; max-width:70px!important; }
 
 /* ===== 手機直向：橫向滑動 ===== */
 @media (max-width:480px) and (orientation:portrait){
-  :root{ --colw:64px }                               /* 每格 64px */
+  :root{ --calw:64px; }   /* 每格 64px */
 
-  #cal-area{
-    overflow-x:auto; -webkit-overflow-scrolling:touch;
-    padding-bottom:6px;
-  }
-  /* 每一列（日曆 row）不允許換行，寬度 > 螢幕 */
+  #cal-area{ overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:6px; }
+
+  /* 整列（日曆 row） */
   #cal-area div[data-testid="stHorizontalBlock"]{
-    display:flex !important;
-    flex-wrap:nowrap !important;
-    min-width:calc(7 * var(--colw) + 12px);          /* 7格 + gap */
-    gap:2px !important;
+      display:flex!important; flex-wrap:nowrap!important;
+      min-width:calc(7 * var(--calw) + 12px);
+      gap:2px!important;
   }
   /* 單格 */
   #cal-area div[data-testid="column"]{
-    flex:0 0 var(--colw)!important;
-    max-width:var(--colw)!important;
-    padding-left:1px!important; padding-right:1px!important;
+      flex:0 0 var(--calw)!important; max-width:var(--calw)!important;
+      padding-left:1px!important; padding-right:1px!important;
   }
-  #cal-area div.calendar-date{ font-size:12px!important; padding:2px 0 }
-  #cal-area div[role="combobox"]{ font-size:11px!important; min-height:24px!important }
+  #cal-area div.calendar-date{ font-size:12px!important; padding:2px 0; }
+  #cal-area div[role="combobox"]{ font-size:11px!important; min-height:24px!important; }
 }
 
-/* ===== 手機橫向：7 等分 + 不截字 ===== */
+/* ===== 手機橫向：不截字 ===== */
 @media (max-width:480px) and (orientation:landscape){
-  :root{ --colw:calc((100vw - 12px)/7) }
-
-  #cal-area div[data-testid="stHorizontalBlock"]{ gap:2px!important }
+  :root{ --calw:calc((100vw - 12px)/7); }
   #cal-area div[data-testid="column"]{
-    flex:0 0 var(--colw)!important;
-    max-width:var(--colw)!important;
-    padding-left:1px!important; padding-right:1px!important;
+      flex:0 0 var(--calw)!important; max-width:var(--calw)!important;
+      padding-left:1px!important; padding-right:1px!important;
   }
-  /* 加寬 select + 10px 字體 */
   #cal-area div[data-baseweb="select"]{
-    width:calc(100% + 16px)!important;
-    margin-left:-8px!important; margin-right:-8px!important;
+      width:calc(100% + 16px)!important; margin-left:-8px!important; margin-right:-8px!important;
   }
   #cal-area div[role="combobox"]{
-    font-size:10px!important;
-    padding-left:4px!important; padding-right:24px!important;
-    white-space:nowrap!important; overflow:visible!important; text-overflow:clip!important;
+      font-size:10px!important; padding-left:4px!important; padding-right:24px!important;
+      white-space:nowrap!important; overflow:visible!important; text-overflow:clip!important;
   }
-  #cal-area li[role="option"]{ font-size:10px!important }
-  #cal-area svg{ width:12px!important; height:12px!important }
+  #cal-area li[role="option"]{ font-size:10px!important; }
+  #cal-area svg{ width:12px!important; height:12px!important; }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -177,67 +163,74 @@ tab_my, tab_sum = st.tabs(["🧑‍💼我的排班", "🗂️員工排班總表
 # === 5-1 我的排班 === #
 with tab_my:
     today = datetime.date.today()
-    year = st.selectbox("年份", list(range(today.year - 1, today.year + 2)), 1, key="y")
-    month = st.selectbox("月份", list(range(1, 13)), today.month - 1, key="m")
+    year  = st.selectbox("年份", list(range(today.year-1, today.year+2)), 1, key="y")
+    month = st.selectbox("月份", list(range(1, 13)), today.month-1,    key="m")
 
+    # 讀取本月自己的資料 → preset
     df_all = (
-        pd.DataFrame(ws_shift.get_all_values()[1:], columns=["date", "shift", "user", "status"])
-        .assign(date=lambda d: pd.to_datetime(d["date"]))
+        pd.DataFrame(ws_shift.get_all_values()[1:], columns=["date","shift","user","status"])
+          .assign(date=lambda d: pd.to_datetime(d["date"]))
     )
-    mask = (df_all["user"] == st.session_state["username"]) & (
-        df_all["date"].dt.year == year
-    ) & (df_all["date"].dt.month == month)
-    df_me = df_all[mask]
+    mask   = (df_all["user"]==st.session_state["username"]) & \
+             (df_all["date"].dt.year==year) & (df_all["date"].dt.month==month)
+    df_me  = df_all[mask]
     preset = dict(zip(df_me["date"].dt.strftime("%Y-%m-%d"), df_me["shift"]))
 
     cal = calendar.Calendar(firstweekday=6)
+
     with st.form("my_form"):
         st.markdown(f"### 📆 {year} 年 {month} 月排班表")
-        st.markdown("<div id='cal-area'>", unsafe_allow_html=True)
-        cols_week = st.columns([1] * 7)
-        for i, l in enumerate(["日", "一", "二", "三", "四", "五", "六"]):
-            bg, fg = ("#004085", "#fff") if i in (0, 6) else ("#fff", "#000")
-            cols_week[i].markdown(
-                f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;"
-                f"text-align:center;font-size:16px'><strong>{l}</strong></div>",
-                unsafe_allow_html=True,
-            )
 
-        shift_data = {}
-        for wk in cal.monthdatescalendar(year, month):
-            cols = st.columns([1] * 7)
-            for i, d in enumerate(wk):
-                with cols[i]:
-                    if d.month != month:
-                        st.markdown("<div style='padding:30px'>&nbsp;</div>", unsafe_allow_html=True)
-                        continue
-                    key = d.isoformat()
-                    init = preset.get(key, "休")
-                    bg = color_map.get(init, "#fff9db")
-                    st.markdown(
-                        f"<div class='calendar-date' style='background:{bg};border-radius:6px;"
-                        f"text-align:center;padding:4px 0'>{d.day}</div>",
-                        unsafe_allow_html=True,
-                    )
-                    val = st.selectbox(
-                        "\u200b",
-                        shift_options,
-                        key=key,
-                        index=shift_options.index(init),
-                        label_visibility="collapsed",
-                    )
-                    shift_data[key] = val
-        st.markdown("</div>", unsafe_allow_html=True)
+        # ❶❷❸————— 月曆區域開始 —————
+        with st.container():                             # ← 關鍵：把月曆整段放進同一個區塊
+            st.markdown("<div id='cal-area'>", unsafe_allow_html=True)
 
+            # ─── 星期列 ───
+            cols_week = st.columns([1]*7)
+            for i, lbl in enumerate(["日","一","二","三","四","五","六"]):
+                bg, fg = ("#004085","#fff") if i in (0,6) else ("#fff","#000")
+                cols_week[i].markdown(
+                    f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;"
+                    f"text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
+                    unsafe_allow_html=True
+                )
+
+            # ─── 日期 + Selectbox ───
+            shift_data = {}
+            for wk in cal.monthdatescalendar(year, month):
+                cols = st.columns([1]*7)
+                for i, d in enumerate(wk):
+                    with cols[i]:
+                        if d.month != month:
+                            st.markdown("<div style='padding:30px'>&nbsp;</div>", unsafe_allow_html=True)
+                            continue
+                        key  = d.isoformat()
+                        init = preset.get(key, "休")
+                        bg   = color_map.get(init, "#fff9db")
+
+                        st.markdown(
+                            f"<div class='calendar-date' style='background:{bg};border-radius:6px;"
+                            f"text-align:center;padding:4px 0'>{d.day}</div>",
+                            unsafe_allow_html=True
+                        )
+                        val = st.selectbox(
+                            "\u200b", shift_options,
+                            key=key, index=shift_options.index(init),
+                            label_visibility="collapsed"
+                        )
+                        shift_data[key] = val
+
+            st.markdown("</div>", unsafe_allow_html=True)
+        # ❹❺————— 月曆區域結束 —————
+
+        # ─── 儲存按鈕 ───
         if st.form_submit_button("💾 儲存排班"):
             for day, s in shift_data.items():
-                hit = df_me[df_me["date"].dt.strftime("%Y-%m-%d") == day]
+                hit = df_me[df_me["date"].dt.strftime("%Y-%m-%d")==day]
                 if not hit.empty:
-                    ws_shift.update_cell(hit.index[0] + 2, 2, s)
+                    ws_shift.update_cell(hit.index[0]+2, 2, s)
                 else:
-                    ws_shift.append_row(
-                        [day, s, st.session_state["username"], "scheduled"]
-                    )
+                    ws_shift.append_row([day, s, st.session_state["username"], "scheduled"])
             st.success("✅ 已更新"); st.rerun()
 
 # === 5-2 月總表（admin 可見） === #
