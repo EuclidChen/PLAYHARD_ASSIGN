@@ -56,6 +56,7 @@ div[data-testid="stTextInput"] input{font-size:18px;padding:12px 14px}
 def make_summary_df(year: int, month: int):
     _, days = calendar.monthrange(year, month)
     dates = [datetime.date(year, month, d) for d in range(1, days + 1)]
+    date_cols  = [str(d.day) for d in dates] 
     weekday_row = [weekday_map[d.weekday()] for d in dates]
 
     df_shift = pd.DataFrame(
@@ -73,7 +74,7 @@ def make_summary_df(year: int, month: int):
             one_row.append(hit.iloc[0]["shift"] if not hit.empty else "休")
         rows.append(one_row)
 
-    cols = ["職稱", "姓名"] + [d.day for d in dates]
+    cols = ["職稱", "姓名"] + date_cols
     df = pd.DataFrame(rows, columns=cols)
     df = pd.concat([pd.DataFrame([["", "星期"] + weekday_row], columns=cols), df])
 
