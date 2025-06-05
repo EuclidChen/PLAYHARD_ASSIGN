@@ -57,7 +57,7 @@ st.markdown("""
 }
 
 /* ===== 手機橫向：維持 7 等分，進一步縮 selectbox 字 ===== */
-@media (max-width:480px) and (orientation:landscape){
+@media (max-width:680px) and (orientation:landscape){
   :root{ --colw: calc((100vw - 32px) / 7); }
 
   div[data-testid="column"]{
@@ -66,7 +66,7 @@ st.markdown("""
   }
 
   div[data-testid="stSelectbox"]>div{
-     font-size:4px!important; min-height:24px!important;
+     font-size:4px!important; min-height:14px!important;
   }
 
   div.calendar-date{ font-size:11px!important; }
