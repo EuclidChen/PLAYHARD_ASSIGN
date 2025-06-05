@@ -36,52 +36,40 @@ st.markdown(
 )
 
 # ---------- 2. 共用 CSS ---------- #
-st.markdown(
-    """
-<style>
-div[data-testid="column"]{flex:1 1 70px!important;max-width:70px!important}
-@media (max-width:480px){
-  div[data-testid="column"]{flex:1 1 60px!important;max-width:60px!important}
-}
-div[data-testid="stSelectbox"]>div{width:100%!important;font-size:14px!important}
-div.calendar-date{font-size:16px!important;font-weight:600}
-div[data-testid="stTextInput"] input{font-size:18px;padding:12px 14px}
-#login-wrapper{max-width:480px;margin:auto}
-</style>
-""",
-    unsafe_allow_html=True,
-)
 st.markdown("""
 <style>
-
-/* -- 手機直向：7 等分 + 小字 -- */
+/* ===== 手機直向：7 等分 + 小字 ===== */
 @media (max-width:480px) and (orientation:portrait){
-  :root{--colw:calc((100vw - 32px)/7)}
-  div[data-testid="column"]{flex:0 0 var(--colw)!important;max-width:var(--colw)!important;padding-left:1px!important;padding-right:1px!important}
-  div.calendar-date{font-size:13px!important;padding:2px 0}
-  div[data-baseweb="select"] div[role="combobox"]{font-size:12px!important;min-height:26px!important}
-  div[data-testid="stColumns"]{gap:2px!important}
-}
+  :root{ --colw: calc((100vw - 32px) / 7); }          /* 等分寬 */
 
-/* -- 手機橫向：維持 7 等分，但放大 select、完整顯示文字 -- */
-@media (max-width:480px) and (orientation:landscape){
-  :root{--colw:calc((100vw - 32px)/7)}
-  div[data-testid="column"]{flex:0 0 var(--colw)!important;max-width:var(--colw)!important;padding-left:1px!important;padding-right:1px!important}
-
-  /* A. 擴寬外框 + 負 margin */
-  div[data-baseweb="select"]{width:calc(100% + 16px)!important;margin-left:-8px!important;margin-right:-8px!important}
-
-  /* B. combobox 文字 10px、去省略號 */
-  div[data-baseweb="select"] div[role="combobox"]{
-    font-size:10px!important;padding-left:4px!important;padding-right:24px!important;
-    white-space:nowrap!important;text-overflow:clip!important;overflow:visible!important
+  div[data-testid="column"]{
+     flex:0 0 var(--colw)!important;
+     max-width:var(--colw)!important;
+     padding-left:1px!important; padding-right:1px!important;
   }
 
-  /* C. 下拉清單同步字級 */
-  div[data-baseweb="select"] li[role="option"]{font-size:10px!important}
+  div.calendar-date{ font-size:13px!important; padding:2px 0 }
+  div[data-testid="stSelectbox"]>div{
+     font-size:12px!important; min-height:26px!important;
+  }
 
-  /* D. 箭頭 icon 微縮 */
-  div[data-baseweb="select"] svg{width:12px!important;height:12px!important}
+  div[data-testid="stColumns"]{ gap:2px!important }
+}
+
+/* ===== 手機橫向：維持 7 等分，進一步縮 selectbox 字 ===== */
+@media (max-width:480px) and (orientation:landscape){
+  :root{ --colw: calc((100vw - 32px) / 7); }
+
+  div[data-testid="column"]{
+     flex:0 0 var(--colw)!important;
+     max-width:var(--colw)!important;
+  }
+
+  div[data-testid="stSelectbox"]>div{
+     font-size:4px!important; min-height:24px!important;
+  }
+
+  div.calendar-date{ font-size:11px!important; }
 }
 </style>
 """, unsafe_allow_html=True)
