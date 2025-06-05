@@ -190,7 +190,7 @@ with tab_my:
                     init = preset.get(key, "休")
                     bg = color_map.get(init, "#fff9db")
                     st.markdown(
-                        f"<div class='calendar-date' style='background:{bg};border-radius:6px;"
+                        f"<div class='calendar-date' style='background:{bg};border-radius:12px;"
                         f"text-align:center;padding:4px 0'>{d.day}</div>",
                         unsafe_allow_html=True,
                     )
