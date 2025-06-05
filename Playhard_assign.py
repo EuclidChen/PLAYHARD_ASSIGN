@@ -36,10 +36,23 @@ st.markdown(
 )
 
 # ---------- 2. 共用 CSS ---------- #
+st.markdown(
+    """
+<style>
+div[data-testid="column"]{flex:1 1 70px!important;max-width:70px!important}
+@media (max-width:480px){
+  div[data-testid="column"]{flex:1 1 60px!important;max-width:60px!important}
+}
+div[data-testid="stSelectbox"]>div{width:100%!important;font-size:14px!important}
+div.calendar-date{font-size:16px!important;font-weight:600}
+div[data-testid="stTextInput"] input{font-size:18px;padding:12px 14px}
+#login-wrapper{max-width:480px;margin:auto}
+</style>
+""",
+    unsafe_allow_html=True,
+)
 st.markdown("""
 <style>
-/* -- 桌機：原 70px 欄寬 -- */
-div[data-testid="column"]{flex:1 1 70px!important;max-width:70px!important}
 
 /* -- 手機直向：7 等分 + 小字 -- */
 @media (max-width:480px) and (orientation:portrait){
