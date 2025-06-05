@@ -36,28 +36,29 @@ st.markdown(
 )
 
 # ---------- 2. 共用 CSS ---------- #
+# ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
 /* ===== 桌機 ===== */
 #cal-area div[data-testid="column"]{ flex:1 1 70px!important; max-width:70px!important; }
 
-/* ===== 手機直向：橫向滑動全行維持在一列 ===== */
+/* ===== 手機直向：橫向滑動全行維持在一列，強制顯示為網格 ===== */
 @media (max-width:768px) {
   #cal-area {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 8px;
-  }
-  #cal-area .stHorizontalBlock {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: 2px !important;
-    min-width: 520px; /* 寬度略寬一週 */
+    display: grid !important;
+    grid-template-columns: repeat(7, 68px) !important;
+    grid-gap: 2px !important;
+    min-width: 476px !important; /* 7 * 68px */
   }
   #cal-area [data-testid="column"] {
     flex: 0 0 68px !important;
     max-width: 68px !important;
     min-width: 68px !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
   #cal-area div[role="combobox"] {
     font-size: 13px !important;
@@ -74,12 +75,15 @@ st.markdown("""
 /* ===== 手機橫向：不截字 ===== */
 @media (max-width:480px) and (orientation:landscape){
   :root{ --calw:calc((100vw - 12px)/7); }
+  #cal-area {
+    display: grid !important;
+    grid-template-columns: repeat(7, var(--calw)) !important;
+    grid-gap: 2px !important;
+    min-width: calc(7 * var(--calw)) !important;
+  }
   #cal-area div[data-testid="column"]{
       flex:0 0 var(--calw)!important; max-width:var(--calw)!important;
       padding-left:1px!important; padding-right:1px!important;
-  }
-  #cal-area div[data-baseweb="select"]{
-      width:calc(100% + 16px)!important; margin-left:-8px!important; margin-right:-8px!important;
   }
   #cal-area div[role="combobox"]{
       font-size:10px!important; padding-left:4px!important; padding-right:24px!important;
