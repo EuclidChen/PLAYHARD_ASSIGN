@@ -38,24 +38,6 @@ st.markdown(
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-/* ===== 手機直向：7 等分 + 小字 ===== */
-@media (max-width:480px) and (orientation:portrait){
-  :root{ --colw: calc((100vw - 32px) / 7); }          /* 等分寬 */
-
-  div[data-testid="column"]{
-     flex:0 0 var(--colw)!important;
-     max-width:var(--colw)!important;
-     padding-left:1px!important; padding-right:1px!important;
-  }
-
-  div.calendar-date{ font-size:13px!important; padding:2px 0 }
-  div[data-testid="stSelectbox"]>div{
-     font-size:12px!important; min-height:26px!important;
-  }
-
-  div[data-testid="stColumns"]{ gap:2px!important }
-}
-
 /* ===== 手機橫向：把 selectbox 寬度往左右各撐 8px ===== */
 @media (max-width:480px) and (orientation:landscape){
   /* 1. 讓最外層 combobox 寬度 > 欄位寬度，並左右回負 margin 對齊 */
