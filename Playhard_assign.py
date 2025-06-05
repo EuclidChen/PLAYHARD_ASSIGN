@@ -46,23 +46,28 @@ st.markdown("""
 
 /* ========= 手機直向 ========= */
 @media (max-width:480px) and (orientation:portrait){
-  :root{ --colw: calc((100vw - 12px) / 7); }   /* 7 等分 */
+  :root{ --colw: 64px; }                 /* 每格固定 64px，7格≈448px > 螢幕 */
 
   #cal-area{
-    overflow-x:auto;        /* 允許橫向捲動 */
-    padding-bottom:6px;
+      overflow-x:auto;                   /* 這層就能滑 */
+      -webkit-overflow-scrolling:touch;  /* 惯性捲動 */
+      padding-bottom:6px;
   }
+
   #cal-area div[data-testid="stColumns"]{
-    flex-wrap:nowrap !important;
-    gap:2px !important;
+      min-width:calc(7 * var(--colw) + 12px);   /* 關鍵 ➜ 整列比手機寬 */
+      flex-wrap:nowrap!important;
+      gap:2px!important;
   }
+
   #cal-area div[data-testid="column"]{
-    flex:0 0 var(--colw) !important;
-    max-width:var(--colw) !important;
-    padding-left:1px !important; padding-right:1px !important;
+      flex:0 0 var(--colw)!important;
+      max-width:var(--colw)!important;
+      padding-left:1px!important; padding-right:1px!important;
   }
-  #cal-area div.calendar-date{ font-size:12px !important; padding:2px 0; }
-  #cal-area div[role="combobox"]{ font-size:11px !important; min-height:24px !important; }
+
+  #cal-area div.calendar-date{ font-size:12px!important; padding:2px 0 }
+  #cal-area div[role="combobox"]{ font-size:11px!important; min-height:24px!important }
 }
 
 /* ========= 手機橫向 ========= */
