@@ -36,14 +36,16 @@ st.markdown(
 )
 
 # ---------- 2. 共用 CSS ---------- #
-# ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
 /* ===== 桌機 ===== */
-#cal-area div[data-testid="column"]{ flex:1 1 70px!important; max-width:70px!important; }
+#cal-area div[data-testid="column"] {
+    flex: 1 1 70px !important;
+    max-width: 70px !important;
+}
 
-/* ===== 手機直向：橫向滑動全行維持在一列，強制顯示為網格 ===== */
-@media (max-width:768px) {
+/* ===== 手機直向：強制 Grid 佈局並防止堆疊 ===== */
+@media (max-width: 768px) {
   #cal-area {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
@@ -53,12 +55,19 @@ st.markdown("""
     grid-gap: 2px !important;
     min-width: 476px !important; /* 7 * 68px */
   }
+  #cal-area .stHorizontalBlock {
+    display: grid !important;
+    grid-template-columns: repeat(7, 68px) !important;
+    grid-gap: 2px !important;
+    flex-wrap: nowrap !important;
+  }
   #cal-area [data-testid="column"] {
     flex: 0 0 68px !important;
     max-width: 68px !important;
     min-width: 68px !important;
     margin: 0 !important;
     padding: 0 !important;
+    display: block !important; /* 防止內部 Flex 影響 */
   }
   #cal-area div[role="combobox"] {
     font-size: 13px !important;
@@ -73,24 +82,41 @@ st.markdown("""
 }
 
 /* ===== 手機橫向：不截字 ===== */
-@media (max-width:480px) and (orientation:landscape){
-  :root{ --calw:calc((100vw - 12px)/7); }
+@media (max-width: 480px) and (orientation: landscape) {
+  :root { --calw: calc((100vw - 12px) / 7); }
   #cal-area {
     display: grid !important;
     grid-template-columns: repeat(7, var(--calw)) !important;
     grid-gap: 2px !important;
     min-width: calc(7 * var(--calw)) !important;
   }
-  #cal-area div[data-testid="column"]{
-      flex:0 0 var(--calw)!important; max-width:var(--calw)!important;
-      padding-left:1px!important; padding-right:1px!important;
+  #cal-area .stHorizontalBlock {
+    display: grid !important;
+    grid-template-columns: repeat(7, var(--calw)) !important;
+    grid-gap: 2px !important;
   }
-  #cal-area div[role="combobox"]{
-      font-size:10px!important; padding-left:4px!important; padding-right:24px!important;
-      white-space:nowrap!important; overflow:visible!important; text-overflow:clip!important;
+  #cal-area div[data-testid="column"] {
+      flex: 0 0 var(--calw) !important;
+      max-width: var(--calw) !important;
+      padding-left: 1px !important;
+      padding-right: 1px !important;
+      display: block !important;
   }
-  #cal-area li[role="option"]{ font-size:10px!important; }
-  #cal-area svg{ width:12px!important; height:12px!important; }
+  #cal-area div[role="combobox"] {
+      font-size: 10px !important;
+      padding-left: 4px !important;
+      padding-right: 24px !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+  }
+  #cal-area li[role="option"] {
+      font-size: 10px !important;
+  }
+  #cal-area svg {
+      width: 12px !important;
+      height: 12px !important;
+  }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -192,43 +218,45 @@ with tab_my:
         st.markdown(f"### 📆 {year} 年 {month} 月排班表")
 
         # ❶❷❸————— 月曆區域開始 —————
-        with st.container():                             # ← 關鍵：把月曆整段放進同一個區塊
+        with st.container():
             st.markdown("<div id='cal-area'>", unsafe_allow_html=True)
 
             # ─── 星期列 ───
-            cols_week = st.columns([1]*7)
-            for i, lbl in enumerate(["日","一","二","三","四","五","六"]):
-                bg, fg = ("#004085","#fff") if i in (0,6) else ("#fff","#000")
-                cols_week[i].markdown(
-                    f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;"
-                    f"text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
-                    unsafe_allow_html=True
-                )
+            with st.container():
+                cols_week = st.columns(7)
+                for i, lbl in enumerate(["日","一","二","三","四","五","六"]):
+                    bg, fg = ("#004085","#fff") if i in (0,6) else ("#fff","#000")
+                    cols_week[i].markdown(
+                        f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;"
+                        f"text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
+                        unsafe_allow_html=True
+                    )
 
             # ─── 日期 + Selectbox ───
             shift_data = {}
             for wk in cal.monthdatescalendar(year, month):
-                cols = st.columns([1]*7)
-                for i, d in enumerate(wk):
-                    with cols[i]:
-                        if d.month != month:
-                            st.markdown("<div style='padding:30px'>&nbsp;</div>", unsafe_allow_html=True)
-                            continue
-                        key  = d.isoformat()
-                        init = preset.get(key, "休")
-                        bg   = color_map.get(init, "#fff9db")
+                with st.container():  # 每個星期獨立容器，確保 Grid 佈局
+                    cols = st.columns(7)
+                    for i, d in enumerate(wk):
+                        with cols[i]:
+                            if d.month != month:
+                                st.markdown("<div style='padding:30px'> </div>", unsafe_allow_html=True)
+                                continue
+                            key  = d.isoformat()
+                            init = preset.get(key, "休")
+                            bg   = color_map.get(init, "#fff9db")
 
-                        st.markdown(
-                            f"<div class='calendar-date' style='background:{bg};border-radius:6px;"
-                            f"text-align:center;padding:4px 0'>{d.day}</div>",
-                            unsafe_allow_html=True
-                        )
-                        val = st.selectbox(
-                            "\u200b", shift_options,
-                            key=key, index=shift_options.index(init),
-                            label_visibility="collapsed"
-                        )
-                        shift_data[key] = val
+                            st.markdown(
+                                f"<div class='calendar-date' style='background:{bg};border-radius:6px;"
+                                f"text-align:center;padding:4px 0'>{d.day}</div>",
+                                unsafe_allow_html=True
+                            )
+                            val = st.selectbox(
+                                "\u200b", shift_options,
+                                key=key, index=shift_options.index(init),
+                                label_visibility="collapsed"
+                            )
+                            shift_data[key] = val
 
             st.markdown("</div>", unsafe_allow_html=True)
         # ❹❺————— 月曆區域結束 —————
