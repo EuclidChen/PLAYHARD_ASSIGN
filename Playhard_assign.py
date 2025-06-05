@@ -66,7 +66,7 @@ st.markdown("""
   }
 
   div[data-testid="stSelectbox"]>div{
-     font-size:9px!important; min-height:24px!important;
+     font-size:4px!important; min-height:24px!important;
   }
 
   div.calendar-date{ font-size:11px!important; }
