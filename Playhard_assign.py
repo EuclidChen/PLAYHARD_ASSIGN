@@ -81,6 +81,8 @@ def make_summary_df(year: int, month: int):
     df.columns = pd.io.parsers.ParserBase({"names": df.columns})._maybe_dedup_names()
     df.columns = df.columns.str.strip().astype(str)
 
+    df.index = range(len(df))
+
     def color(val):
         if val == "全天":
             return "background-color:#d4edda"
