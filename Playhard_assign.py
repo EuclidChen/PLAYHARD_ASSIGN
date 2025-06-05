@@ -36,21 +36,29 @@ st.markdown(
 )
 
 # ---------- 2. 共用 CSS ---------- #
-st.markdown(
-    """
+st.markdown("""
 <style>
-div[data-testid="column"]{flex:1 1 70px!important;max-width:70px!important}
+/* ===== 手機版（<=480px）一次顯示整個月 ===== */
 @media (max-width:480px){
-  div[data-testid="column"]{flex:1 1 60px!important;max-width:60px!important}
+  /* 1. 7 等分：calc(100vw / 7)；減去左右 padding 32px 再平均 */
+  :root{ --colw: calc((100vw - 32px) / 7); }
+
+  div[data-testid="column"]{
+     flex: 0 0 var(--colw)!important;
+     max-width: var(--colw)!important;
+     padding-left:1px!important;
+     padding-right:1px!important;
+  }
+
+  /* 2. 日期字 & selectbox 縮小 */
+  div.calendar-date{ font-size:13px!important; padding:2px 0 }
+  div[data-testid="stSelectbox"]>div{ font-size:12px!important; min-height:26px!important }
+
+  /* 3. 行間距微縮，畫面更緊湊 */
+  div[data-testid="stColumns"]{ gap:2px!important }
 }
-div[data-testid="stSelectbox"]>div{width:100%!important;font-size:14px!important}
-div.calendar-date{font-size:16px!important;font-weight:600}
-div[data-testid="stTextInput"] input{font-size:18px;padding:12px 14px}
-#login-wrapper{max-width:480px;margin:auto}
 </style>
-""",
-    unsafe_allow_html=True,
-)
+""", unsafe_allow_html=True)
 
 # ---------- 3. 產生總表 Styler ---------- #
 def make_summary_df(year: int, month: int):
