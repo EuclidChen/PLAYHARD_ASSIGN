@@ -78,6 +78,9 @@ def make_summary_df(year: int, month: int):
     df = pd.DataFrame(rows, columns=cols)
     df = pd.concat([pd.DataFrame([["", "星期"] + weekday_row], columns=cols), df])
 
+    df.columns = pd.io.parsers.ParserBase({"names": df.columns})._maybe_dedup_names()
+    df.columns = df.columns.str.strip().astype(str)
+
     def color(val):
         if val == "全天":
             return "background-color:#d4edda"
@@ -87,8 +90,7 @@ def make_summary_df(year: int, month: int):
             return "background-color:#fff9db"
         return ""
 
-    styler = df.style.applymap(color, subset=pd.IndexSlice[:, df.columns[2:]])
-    return styler
+    return df.style.applymap(color, subset=pd.IndexSlice[:, df.columns[2:]])
 
 
 # ---------- 4. 登入 ---------- #
