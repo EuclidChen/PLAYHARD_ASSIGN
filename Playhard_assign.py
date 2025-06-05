@@ -41,25 +41,34 @@ st.markdown("""
 /* ===== 桌機 ===== */
 #cal-area div[data-testid="column"]{ flex:1 1 70px!important; max-width:70px!important; }
 
-/* ===== 手機直向：橫向滑動 ===== */
-@media (max-width:480px) and (orientation:portrait){
-  :root{ --calw:64px; }   /* 每格 64px */
-
-  #cal-area{ overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:6px; }
-
-  /* 整列（日曆 row） */
-  #cal-area div[data-testid="stHorizontalBlock"]{
-      display:flex!important; flex-wrap:nowrap!important;
-      min-width:calc(7 * var(--calw) + 12px);
-      gap:2px!important;
+/* ===== 手機直向：橫向滑動強化版 ===== */
+@media (max-width:768px) {
+  #cal-area {
+    display: block !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    white-space: nowrap;
   }
-  /* 單格 */
-  #cal-area div[data-testid="column"]{
-      flex:0 0 var(--calw)!important; max-width:var(--calw)!important;
-      padding-left:1px!important; padding-right:1px!important;
+  #cal-area .stHorizontalBlock {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+    min-width: calc(7 * 72px + 20px);
   }
-  #cal-area div.calendar-date{ font-size:12px!important; padding:2px 0; }
-  #cal-area div[role="combobox"]{ font-size:11px!important; min-height:24px!important; }
+  #cal-area [data-testid="column"] {
+    flex: 0 0 72px !important;
+    max-width: 72px !important;
+    min-width: 72px !important;
+  }
+  #cal-area div[role="combobox"] {
+    font-size: 12px !important;
+    min-height: 24px !important;
+  }
+  #cal-area div.calendar-date {
+    font-size: 13px !important;
+    padding: 3px 0 !important;
+  }
 }
 
 /* ===== 手機橫向：不截字 ===== */
@@ -81,9 +90,6 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
-
-
-
 # ---------- 3. 產生總表 Styler ---------- #
 def make_summary_df(year: int, month: int):
     _, days = calendar.monthrange(year, month)
