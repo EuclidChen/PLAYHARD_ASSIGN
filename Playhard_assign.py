@@ -38,25 +38,37 @@ st.markdown(
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-/* ===== 手機橫向：把 selectbox 寬度往左右各撐 8px ===== */
+/* -- 桌機：原 70px 欄寬 -- */
+div[data-testid="column"]{flex:1 1 70px!important;max-width:70px!important}
+
+/* -- 手機直向：7 等分 + 小字 -- */
+@media (max-width:480px) and (orientation:portrait){
+  :root{--colw:calc((100vw - 32px)/7)}
+  div[data-testid="column"]{flex:0 0 var(--colw)!important;max-width:var(--colw)!important;padding-left:1px!important;padding-right:1px!important}
+  div.calendar-date{font-size:13px!important;padding:2px 0}
+  div[data-baseweb="select"] div[role="combobox"]{font-size:12px!important;min-height:26px!important}
+  div[data-testid="stColumns"]{gap:2px!important}
+}
+
+/* -- 手機橫向：維持 7 等分，但放大 select、完整顯示文字 -- */
 @media (max-width:480px) and (orientation:landscape){
-  /* 1. 讓最外層 combobox 寬度 > 欄位寬度，並左右回負 margin 對齊 */
-  div[data-baseweb="select"]{
-     width: calc(100% + 16px) !important;   /* 欄寬 + 16px */
-     margin-left: -8px !important;
-     margin-right:-8px !important;
-  }
+  :root{--colw:calc((100vw - 32px)/7)}
+  div[data-testid="column"]{flex:0 0 var(--colw)!important;max-width:var(--colw)!important;padding-left:1px!important;padding-right:1px!important}
 
-  /* 2. 文字保持 12px，padding 略縮，確保 still clickable */
+  /* A. 擴寬外框 + 負 margin */
+  div[data-baseweb="select"]{width:calc(100% + 16px)!important;margin-left:-8px!important;margin-right:-8px!important}
+
+  /* B. combobox 文字 10px、去省略號 */
   div[data-baseweb="select"] div[role="combobox"]{
-     font-size:12px !important;
-     padding-left:4px !important;
-     padding-right:28px !important;   /* 給箭頭位置 */
-     text-overflow:clip !important;    /* 不要出現… */
+    font-size:10px!important;padding-left:4px!important;padding-right:24px!important;
+    white-space:nowrap!important;text-overflow:clip!important;overflow:visible!important
   }
 
-  /* 3. 下拉清單同步字級 */
-  li[role="option"]{ font-size:12px !important; }
+  /* C. 下拉清單同步字級 */
+  div[data-baseweb="select"] li[role="option"]{font-size:10px!important}
+
+  /* D. 箭頭 icon 微縮 */
+  div[data-baseweb="select"] svg{width:12px!important;height:12px!important}
 }
 </style>
 """, unsafe_allow_html=True)
