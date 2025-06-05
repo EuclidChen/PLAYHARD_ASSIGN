@@ -78,9 +78,7 @@ def make_summary_df(year: int, month: int):
     df = pd.DataFrame(rows, columns=cols)
     df = pd.concat([pd.DataFrame([["", "星期"] + weekday_row], columns=cols), df])
 
-    df.columns = pd.io.parsers.ParserBase({"names": df.columns})._maybe_dedup_names()
     df.columns = df.columns.str.strip().astype(str)
-
     df.index = range(len(df))
 
     def color(val):
