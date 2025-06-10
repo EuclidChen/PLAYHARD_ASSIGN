@@ -83,17 +83,17 @@ st.markdown("""
 
 /* ===== 手機橫向：不截字 ===== */
 @media (max-width: 932px) and (orientation: landscape) {
-  :root { --calw: calc((100vw - 8px) / 7); }
+  :root { --calw: calc((100vw - 4px) / 7); }
   #cal-area {
     display: grid !important;
     grid-template-columns: repeat(7, var(--calw)) !important;
-    grid-gap: 2px !important;
+    grid-gap: 1px !important;
     min-width: calc(7 * var(--calw)) !important;
   }
   #cal-area .stHorizontalBlock {
     display: grid !important;
     grid-template-columns: repeat(7, var(--calw)) !important;
-    grid-gap: 2px !important;
+    grid-gap: 1px !important;
   }
   #cal-area div[data-testid="column"] {
       flex: 0 0 var(--calw) !important;
@@ -103,7 +103,7 @@ st.markdown("""
       display: block !important;
   }
   #cal-area div[role="combobox"] {
-      font-size: 10px !important;
+      font-size: 12px !important;
       padding-left: 4px !important;
       padding-right: 24px !important;
       white-space: nowrap !important;
@@ -114,8 +114,8 @@ st.markdown("""
       font-size: 10px !important;
   }
   #cal-area svg {
-      width: 12px !important;
-      height: 12px !important;
+      width: 8px !important;
+      height: 8px !important;
   }
 }
 </style>
