@@ -82,8 +82,8 @@ st.markdown("""
 }
 
 /* ===== 手機橫向：不截字 ===== */
-@media (max-width: 480px) and (orientation: landscape) {
-  :root { --calw: calc((100vw - 12px) / 7); }
+@media (max-width: 932px) and (orientation: landscape) {
+  :root { --calw: calc((100vw - 8px) / 7); }
   #cal-area {
     display: grid !important;
     grid-template-columns: repeat(7, var(--calw)) !important;
