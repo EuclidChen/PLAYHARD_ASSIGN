@@ -147,9 +147,8 @@ with tab_my:
             st.markdown("<div id='cal-area'>", unsafe_allow_html=True)
 
             # ─── 星期列 ───
-            with st.container():
-                cols_week = st.columns(7)
-                for i, lbl in enumerate(["日","一","二","三","四","五","六"]):
+            cols_week = st.columns(7)
+            for i, lbl in enumerate(["日","一","二","三","四","五","六"]):
                     bg, fg = ("#004085","#fff") if i in (0,6) else ("#fff","#000")
                     cols_week[i].markdown(
                         f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;"
@@ -160,28 +159,27 @@ with tab_my:
             # ─── 日期 + Selectbox ───
             shift_data = {}
             for wk in cal.monthdatescalendar(year, month):
-                with st.container():  # 每個星期獨立容器，確保 Grid 佈局
-                    cols = st.columns(7)
-                    for i, d in enumerate(wk):
-                        with cols[i]:
-                            if d.month != month:
-                                st.markdown("<div style='padding:30px'> </div>", unsafe_allow_html=True)
-                                continue
-                            key  = d.isoformat()
-                            init = preset.get(key, "休")
-                            bg   = color_map.get(init, "#fff9db")
+                cols = st.columns(7)
+                for i, d in enumerate(wk):
+                    with cols[i]:
+                        if d.month != month:
+                            st.markdown("<div style='padding:30px'> </div>", unsafe_allow_html=True)
+                            continue
+                        key  = d.isoformat()
+                        init = preset.get(key, "休")
+                        bg   = color_map.get(init, "#fff9db")
 
-                            st.markdown(
+                        st.markdown(
                                 f"<div class='calendar-date' style='background:{bg};border-radius:6px;"
                                 f"text-align:center;padding:4px 0'>{d.day}</div>",
                                 unsafe_allow_html=True
                             )
-                            val = st.selectbox(
+                        val = st.selectbox(
                                 "\u200b", shift_options,
                                 key=key, index=shift_options.index(init),
                                 label_visibility="collapsed"
                             )
-                            shift_data[key] = val
+                        shift_data[key] = val
 
             st.markdown("</div>", unsafe_allow_html=True)
         # ❹❺————— 月曆區域結束 —————
