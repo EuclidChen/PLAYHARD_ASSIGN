@@ -51,23 +51,23 @@ st.markdown("""
     -webkit-overflow-scrolling: touch;
     padding-bottom: 8px;
     display: grid !important;
-    grid-template-columns: repeat(7, 68px) !important;
+    grid-template-columns: repeat(7, 72px) !important;
     grid-gap: 2px !important;
-    min-width: 476px !important; /* 7 * 68px */
+    min-width: 504px !important; /* 7 * 72px */
   }
   #cal-area .stHorizontalBlock {
     display: grid !important;
-    grid-template-columns: repeat(7, 68px) !important;
+    grid-template-columns: repeat(7, 72px) !important;
     grid-gap: 2px !important;
     flex-wrap: nowrap !important;
   }
   #cal-area [data-testid="column"] {
-    flex: 0 0 68px !important;
-    max-width: 68px !important;
-    min-width: 68px !important;
+    flex: 0 0 72px !important;
+    max-width: 72px !important;
+    min-width: 72px !important;
     margin: 0 !important;
     padding: 0 !important;
-    display: block !important; /* 防止內部 Flex 影響 */
+    display: block !important;
   }
   #cal-area div[role="combobox"] {
     font-size: 13px !important;
@@ -81,23 +81,23 @@ st.markdown("""
   }
 }
 
-/* ===== 手機橫向：不截字 ===== */
-@media (max-width: 932px) and (orientation: landscape) {
-  :root { --calw: calc((100vw - 4px) / 7); }
+/* ===== 手機橫向（針對 iPhone 15 類解析度） ===== */
+@media (max-width: 1024px) and (orientation: landscape) {
   #cal-area {
     display: grid !important;
-    grid-template-columns: repeat(7, var(--calw)) !important;
+    grid-template-columns: repeat(7, 80px) !important;
     grid-gap: 1px !important;
-    min-width: calc(7 * var(--calw)) !important;
+    min-width: 560px !important;
+    overflow-x: auto !important;
   }
   #cal-area .stHorizontalBlock {
     display: grid !important;
-    grid-template-columns: repeat(7, var(--calw)) !important;
+    grid-template-columns: repeat(7, 80px) !important;
     grid-gap: 1px !important;
   }
   #cal-area div[data-testid="column"] {
-      flex: 0 0 var(--calw) !important;
-      max-width: var(--calw) !important;
+      flex: 0 0 80px !important;
+      max-width: 80px !important;
       padding-left: 1px !important;
       padding-right: 1px !important;
       display: block !important;
@@ -114,8 +114,8 @@ st.markdown("""
       font-size: 10px !important;
   }
   #cal-area svg {
-      width: 8px !important;
-      height: 8px !important;
+      width: 10px !important;
+      height: 10px !important;
   }
 }
 </style>
