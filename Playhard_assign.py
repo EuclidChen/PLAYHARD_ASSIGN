@@ -43,6 +43,82 @@ st.markdown("""
     flex: 1 1 70px !important;
     max-width: 70px !important;
 }
+
+/* ===== 手機直向：強制 Grid 佈局並防止堆疊 ===== */
+@media (max-width: 768px) {
+  #cal-area {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+    display: grid !important;
+    grid-template-columns: repeat(7, 72px) !important;
+    grid-gap: 2px !important;
+    min-width: 504px !important; /* 7 * 72px */
+  }
+  #cal-area .stHorizontalBlock {
+    display: grid !important;
+    grid-template-columns: repeat(7, 72px) !important;
+    grid-gap: 2px !important;
+    flex-wrap: nowrap !important;
+  }
+  #cal-area [data-testid="column"] {
+    flex: 0 0 72px !important;
+    max-width: 72px !important;
+    min-width: 72px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+  #cal-area div[role="combobox"] {
+    font-size: 13px !important;
+    min-height: 24px !important;
+    width: 100% !important;
+  }
+  #cal-area div.calendar-date {
+    font-size: 13px !important;
+    padding: 3px 0 !important;
+    text-align: center;
+  }
+}
+
+/* ===== 手機橫向（針對 iPhone 15 類解析度） ===== */
+@media (max-width: 1024px) and (orientation: landscape) {
+  #cal-area {
+    display: grid !important;
+    grid-template-columns: repeat(7, 80px) !important;
+    grid-gap: 1px !important;
+    min-width: 560px !important;
+    overflow-x: auto !important;
+  }
+  #cal-area .stHorizontalBlock {
+    display: grid !important;
+    grid-template-columns: repeat(7, 80px) !important;
+    grid-gap: 1px !important;
+  }
+  #cal-area div[data-testid="column"] {
+      flex: 0 0 80px !important;
+      max-width: 80px !important;
+      padding-left: 1px !important;
+      padding-right: 1px !important;
+      display: block !important;
+  }
+  #cal-area div[role="combobox"] {
+      font-size: 12px !important;
+      padding-left: 4px !important;
+      padding-right: 24px !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+  }
+  #cal-area li[role="option"] {
+      font-size: 10px !important;
+  }
+  #cal-area svg {
+      width: 10px !important;
+      height: 10px !important;
+  }
+}
+</style>
 """, unsafe_allow_html=True)
 
 # ---------- 3. 產生總表 Styler ---------- #
