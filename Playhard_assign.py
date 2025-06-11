@@ -85,7 +85,7 @@ st.markdown("""
 @media (max-width: 1024px) and (orientation: landscape) {
   #cal-area {
     display: grid !important;
-    grid-template-columns: repeat(7, 80px) !important;
+    grid-template-columns: repeat(7, 50px) !important;
     grid-gap: 1px !important;
     min-width: 560px !important;
     overflow-x: auto !important;
@@ -114,8 +114,8 @@ st.markdown("""
       font-size: 10px !important;
   }
   #cal-area svg {
-      width: 10px !important;
-      height: 10px !important;
+      width: 4px !important;
+      height: 4px !important;
   }
 }
 </style>
