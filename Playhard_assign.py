@@ -128,72 +128,61 @@ tab_my, tab_sum = st.tabs(["🧑‍💼我的排班", "🗂️員工排班總表
 # === 5-1 我的排班 === #
 with tab_my:
     today = datetime.date.today()
-    year  = st.selectbox("年份", list(range(today.year-1, today.year+2)), 1, key="y")
-    month = st.selectbox("月份", list(range(1, 13)), today.month-1,    key="m")
+    year = st.selectbox("年份", list(range(today.year - 1, today.year + 2)), index=1)
+    month = st.selectbox("月份", list(range(1, 13)), index=today.month - 1)
 
-    # 讀取本月自己的資料 → preset
-    df_all = (
-        pd.DataFrame(ws_shift.get_all_values()[1:], columns=["date","shift","user","status"])
-          .assign(date=lambda d: pd.to_datetime(d["date"]))
+    df_all = pd.DataFrame(ws_shift.get_all_values()[1:], columns=["date", "shift", "user", "status"])
+    df_all["date"] = pd.to_datetime(df_all["date"])
+
+    mask = (
+        (df_all["user"] == st.session_state.get("username", "")) &
+        (df_all["date"].dt.year == year) &
+        (df_all["date"].dt.month == month)
     )
-    mask   = (df_all["user"]==st.session_state["username"]) & \
-             (df_all["date"].dt.year==year) & (df_all["date"].dt.month==month)
-    df_me  = df_all[mask]
+    df_me = df_all[mask]
     preset = dict(zip(df_me["date"].dt.strftime("%Y-%m-%d"), df_me["shift"]))
 
     cal = calendar.Calendar(firstweekday=6)
 
     with st.form("my_form"):
         st.markdown(f"### 📆 {year} 年 {month} 月排班表")
+        st.markdown("<div id='cal-area'>", unsafe_allow_html=True)
 
-        # ❶❷❸————— 月曆區域開始 —————
-        with st.container():
-            st.markdown("<div id='cal-area'>", unsafe_allow_html=True)
+        # 星期列
+        cols_week = st.columns(7)
+        for i, lbl in enumerate(["日","一","二","三","四","五","六"]):
+            bg, fg = ("#004085", "#fff") if i in (0, 6) else ("#fff", "#000")
+            cols_week[i].markdown(
+                f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
+                unsafe_allow_html=True
+            )
 
-            # ─── 星期列 ───
-            cols_week = st.columns(7)
-            for i, lbl in enumerate(["日","一","二","三","四","五","六"]):
-                    bg, fg = ("#004085","#fff") if i in (0,6) else ("#fff","#000")
-                    cols_week[i].markdown(
-                        f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;"
-                        f"text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
+        # 每週
+        shift_data = {}
+        for wk in cal.monthdatescalendar(year, month):
+            st.markdown("<div class='cal-row'>", unsafe_allow_html=True)
+            cols = st.columns(7)
+            for i, d in enumerate(wk):
+                with cols[i]:
+                    if d.month != month:
+                        st.markdown("<div style='padding:30px'>&nbsp;</div>", unsafe_allow_html=True)
+                        continue
+                    key = d.isoformat()
+                    init = preset.get(key, "休")
+                    bg = color_map.get(init, "#fff9db")
+                    st.markdown(
+                        f"<div class='calendar-date' style='background:{bg};border-radius:6px;padding:4px 0'>{d.day}</div>",
                         unsafe_allow_html=True
                     )
-
-            # ─── 日期 + Selectbox ───
-            shift_data = {}
-            for wk in cal.monthdatescalendar(year, month):
-                cols = st.columns(7)
-                for i, d in enumerate(wk):
-                    with cols[i]:
-                        if d.month != month:
-                            st.markdown("<div style='padding:30px'> </div>", unsafe_allow_html=True)
-                            continue
-                        key  = d.isoformat()
-                        init = preset.get(key, "休")
-                        bg   = color_map.get(init, "#fff9db")
-
-                        st.markdown(
-                                f"<div class='calendar-date' style='background:{bg};border-radius:6px;"
-                                f"text-align:center;padding:4px 0'>{d.day}</div>",
-                                unsafe_allow_html=True
-                            )
-                        val = st.selectbox(
-                                "\u200b", shift_options,
-                                key=key, index=shift_options.index(init),
-                                label_visibility="collapsed"
-                            )
-                        shift_data[key] = val
-
+                    val = st.selectbox("\u200b", shift_options, key=key, index=shift_options.index(init), label_visibility="collapsed")
+                    shift_data[key] = val
             st.markdown("</div>", unsafe_allow_html=True)
-        # ❹❺————— 月曆區域結束 —————
 
-        # ─── 儲存按鈕 ───
         if st.form_submit_button("💾 儲存排班"):
             for day, s in shift_data.items():
-                hit = df_me[df_me["date"].dt.strftime("%Y-%m-%d")==day]
+                hit = df_me[df_me["date"].dt.strftime("%Y-%m-%d") == day]
                 if not hit.empty:
-                    ws_shift.update_cell(hit.index[0]+2, 2, s)
+                    ws_shift.update_cell(hit.index[0] + 2, 2, s)
                 else:
                     ws_shift.append_row([day, s, st.session_state["username"], "scheduled"])
             st.success("✅ 已更新"); st.rerun()
