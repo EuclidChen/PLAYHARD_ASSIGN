@@ -38,8 +38,9 @@ st.markdown(
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-#cal-area { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
-.cal-row { display: flex !important; min-width: 700px; gap: 2px; }
+#cal-area-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+#cal-area { min-width: 700px; }
+.cal-row { display: flex !important; gap: 2px; }
 .calendar-date { font-weight: bold; font-size: 16px; text-align: center; }
 @media (max-width: 1024px) {
   .calendar-date { font-size: 13px !important; }
@@ -146,7 +147,7 @@ with tab_my:
 
     with st.form("my_form"):
         st.markdown(f"### 📆 {year} 年 {month} 月排班表")
-        st.markdown("<div id='cal-area'>", unsafe_allow_html=True)
+        st.markdown("<div id='cal-area-wrapper'><div id='cal-area'>", unsafe_allow_html=True)
 
         # 星期列
         cols_week = st.columns(7)
@@ -177,6 +178,8 @@ with tab_my:
                     val = st.selectbox("\u200b", shift_options, key=key, index=shift_options.index(init), label_visibility="collapsed")
                     shift_data[key] = val
             st.markdown("</div>", unsafe_allow_html=True)
+
+        st.markdown("</div></div>", unsafe_allow_html=True)
 
         if st.form_submit_button("💾 儲存排班"):
             for day, s in shift_data.items():
