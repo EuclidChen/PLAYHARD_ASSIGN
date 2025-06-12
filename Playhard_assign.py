@@ -30,25 +30,19 @@ color_map     = {"全天": "#d4edda", "休": "#f8d7da"}   # 其他→黃
 weekday_map   = ["一", "二", "三", "四", "五", "六", "日"]
 
 st.set_page_config(page_title="玩硬劇本排班系統", layout="wide")
-st.markdown(
-    '<meta name="viewport" content="width=device-width, initial-scale=1">',
-    unsafe_allow_html=True,
-)
+st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1">', unsafe_allow_html=True)
 
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-#cal-area-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
-#cal-area { min-width: 700px; }
+#cal-area-wrapper { overflow-x: auto !important; -webkit-overflow-scrolling: touch; padding-bottom: 8px; display: block; }
+#cal-area { display: inline-block; min-width: 700px; }
 .cal-row { display: flex !important; gap: 2px; }
 .calendar-date { font-weight: bold; font-size: 16px; text-align: center; }
 @media (max-width: 1024px) {
   .calendar-date { font-size: 13px !important; }
   div[role="combobox"] { font-size: 12px !important; }
   div[data-testid="column"] { max-width: 80px !important; min-width: 80px !important; }
-}
-</style>
-""", unsafe_allow_html=True)
 
 # ---------- 3. 產生總表 Styler ---------- #
 def make_summary_df(year: int, month: int):
@@ -150,13 +144,14 @@ with tab_my:
         st.markdown("<div id='cal-area-wrapper'><div id='cal-area'>", unsafe_allow_html=True)
 
         # 星期列
-        cols_week = st.columns(7)
+        st.markdown("<div class='cal-row'>", unsafe_allow_html=True)
         for i, lbl in enumerate(["日","一","二","三","四","五","六"]):
             bg, fg = ("#004085", "#fff") if i in (0, 6) else ("#fff", "#000")
-            cols_week[i].markdown(
-                f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
+            st.markdown(
+                f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;width:100px;text-align:center;font-size:16px;display:inline-block'><strong>{lbl}</strong></div>",
                 unsafe_allow_html=True
             )
+        st.markdown("</div>", unsafe_allow_html=True)
 
         # 每週
         shift_data = {}
