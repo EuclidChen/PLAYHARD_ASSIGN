@@ -38,8 +38,9 @@ st.markdown(
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-#cal-area { overflow-x: auto; }
-.calendar-date { font-weight: bold; font-size: 16px; }
+#cal-area { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px; }
+.cal-row { display: flex !important; min-width: 700px; gap: 2px; }
+.calendar-date { font-weight: bold; font-size: 16px; text-align: center; }
 @media (max-width: 1024px) {
   .calendar-date { font-size: 13px !important; }
   div[role="combobox"] { font-size: 12px !important; }
@@ -47,7 +48,6 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
-
 
 # ---------- 3. 產生總表 Styler ---------- #
 def make_summary_df(year: int, month: int):
