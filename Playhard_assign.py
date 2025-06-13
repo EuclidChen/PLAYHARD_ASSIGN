@@ -40,38 +40,21 @@ st.markdown("""
   margin: auto;
   padding-top: 5vh;
 }
-@media (max-width: 1024px) {
-  div[data-testid="stForm"] input,
-  div[data-testid="stForm"] button {
-    font-size: 16px !important;
-    height: 38px !important;
-    width: 100% !important;
-  }
-
-  div[data-testid="stForm"] label {
-    font-size: 14px !important;
-  }
-
-  div[data-testid="stForm"] {
-    width: 100% !important;
-  }
+#login-wrapper input[type="password"] {
+  padding-right: 36px !important;
 }
-@media (min-width: 1025px) {
-  div[data-testid="stForm"] input,
-  div[data-testid="stForm"] button {
-    font-size: 18px !important;
-    height: 42px !important;
-    width: 100% !important;
-  }
 
-  div[data-testid="stForm"] label {
-    font-size: 16px !important;
-  }
-
-  div[data-testid="stForm"] {
-    max-width: 480px !important;
-    margin: auto;
-  }
+#login-wrapper input[type="password"] {
+  padding-right: 36px !important;
+}
+#login-wrapper input,
+#login-wrapper button {
+  font-size: 16px !important;
+  height: 40px !important;
+  width: 100% !important;
+}
+#login-wrapper label {
+  font-size: 14px !important;
 }
 </style>
 """, unsafe_allow_html=True)
