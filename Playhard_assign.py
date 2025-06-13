@@ -1,4 +1,4 @@
-# app.py
+# app.pyMore actions
 import json, calendar, datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -16,7 +16,7 @@ scope = [
 creds_dict = json.loads(st.secrets["GOOGLE_CREDS_JSON"])
 sheet_key  = st.secrets["SHEET_KEY"]
 
-gc = gspread.authorize(
+gc = gspread.authorize(More actions
     ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 )
 sh = gc.open_by_key(sheet_key)
@@ -103,7 +103,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- 3. 產生總表 Styler ---------- #
+# ---------- 3. 產生總表 Styler ---------- #More actions
 def make_summary_df(year: int, month: int):
     _, days = calendar.monthrange(year, month)
     dates = [datetime.date(year, month, d) for d in range(1, days + 1)]
@@ -145,7 +145,8 @@ def make_summary_df(year: int, month: int):
 
 # ---------- 4. 登入 ---------- #
 if not st.session_state.get("authenticated"):
-    with st.container():
+    _, c, _ = st.columns([3, 2, 3])
+    with c:
         st.markdown("<div id='login-wrapper'>", unsafe_allow_html=True)
         st.subheader("🔐 請登入")
         with st.form("login"):
@@ -190,7 +191,7 @@ with tab_my:
         (df_all["date"].dt.month == month)
     )
     df_me = df_all[mask]
-    preset = dict(zip(df_me["date"].dt.strftime("%Y-%m-%d"), df_me["shift"]))
+    preset = dict(zip(df_me["date"].dt.strftime("%Y-%m-%d"), df_me["shift"]))More actions
 
     cal = calendar.Calendar(firstweekday=6)
 
