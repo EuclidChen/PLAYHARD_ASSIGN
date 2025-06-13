@@ -198,25 +198,25 @@ def make_summary_df(year: int, month: int):
 
 # ---------- 4. 登入 ---------- #
 if not st.session_state.get("authenticated"):
-        st.markdown("<div id='login-wrapper'>", unsafe_allow_html=True)
-        st.subheader("🔐 請登入")
-        with st.form("login"):
-            u = st.text_input("帳號")
-            p = st.text_input("密碼", type="password")
-            if st.form_submit_button("登入"):
-                rec = users_df[users_df.username == u]
-                if not rec.empty and bcrypt.verify(p, rec.password_hash.iloc[0]):
-                    st.session_state.update({
-                        "authenticated": True,
-                        "username": u,
-                        "display_name": rec.display_name.iloc[0],
-                        "role": rec.role.iloc[0],
-                    })
-                    st.rerun()
-                else:
-                    st.error("帳號或密碼錯誤")
-        st.markdown("</div>", unsafe_allow_html=True)
-    st.stop()
+    st.markdown("<div id='login-wrapper'>", unsafe_allow_html=True)
+    st.subheader("🔐 請登入")
+    with st.form("login"):
+        u = st.text_input("帳號")
+        p = st.text_input("密碼", type="password")
+        if st.form_submit_button("登入"):
+            rec = users_df[users_df.username == u]
+            if not rec.empty and bcrypt.verify(p, rec.password_hash.iloc[0]):
+                st.session_state.update({
+                    "authenticated": True,
+                    "username": u,
+                    "display_name": rec.display_name.iloc[0],
+                    "role": rec.role.iloc[0],
+                })
+                st.rerun()
+            else:
+                st.error("帳號或密碼錯誤")
+    st.markdown("</div>", unsafe_allow_html=True)
+st.stop()
 
 # ---------- 5. 主介面 ---------- #
 st.sidebar.success(f"👋 {st.session_state['display_name']}")
