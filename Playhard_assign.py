@@ -40,18 +40,23 @@ st.markdown("""
   margin: auto;
   padding-top: 5vh;
 }
-@media (max-width: 768px) {
+@media (min-width: 1025px) {
   div[data-testid="stForm"] input,
   div[data-testid="stForm"] button {
-    font-size: 16px !important;
-    height: 38px !important;
+    font-size: 18px !important;
+    height: 42px !important;
+    width: 100% !important;
   }
+
   div[data-testid="stForm"] label {
-    font-size: 14px !important;
+    font-size: 16px !important;
+  }
+
+  div[data-testid="stForm"] {
+    max-width: 480px !important;
+    margin: auto;
   }
 }
-</style>
-""", unsafe_allow_html=True)
 
 # ---------- 排班頁面 CSS ---------- #
 st.markdown("""
