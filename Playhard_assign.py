@@ -1,4 +1,4 @@
-# app.pyMore actions
+# app.py
 import json, calendar, datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -134,7 +134,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ---------- 3. 產生總表 Styler ---------- #More actions
+# ---------- 3. 產生總表 Styler ---------- #
 def make_summary_df(year: int, month: int):
     _, days = calendar.monthrange(year, month)
     dates = [datetime.date(year, month, d) for d in range(1, days + 1)]
@@ -222,7 +222,7 @@ with tab_my:
         (df_all["date"].dt.month == month)
     )
     df_me = df_all[mask]
-    preset = dict(zip(df_me["date"].dt.strftime("%Y-%m-%d"), df_me["shift"]))More actions
+    preset = dict(zip(df_me["date"].dt.strftime("%Y-%m-%d"), df_me["shift"]))
 
     cal = calendar.Calendar(firstweekday=6)
 
