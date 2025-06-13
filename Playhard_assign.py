@@ -35,6 +35,22 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
+/* 登入畫面置中與縮放 */
+#login-wrapper {
+  max-width: 280px;
+  margin: 0 auto;
+  padding-top: 10vh;
+}
+@media (max-width: 768px) {
+  #login-wrapper .stTextInput input,
+  #login-wrapper .stTextInput,
+  #login-wrapper .stPassword input,
+  #login-wrapper .stPassword {
+    font-size: 14px !important;
+  }
+  #login-wrapper button { font-size: 14px !important; }
+}
+
 #cal-area-wrapper { overflow-x: auto !important; -webkit-overflow-scrolling: touch; padding-bottom: 8px; display: block; }
 #cal-area { display: inline-block; min-width: 700px; }
 .cal-row { display: flex !important; gap: 2px; }
