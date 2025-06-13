@@ -35,12 +35,14 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 # ---------- 登入頁面 CSS ---------- #
 st.markdown("""
 <style>
+/* 📌 預設登入容器寬度（桌機） */
 #login-wrapper {
-  max-width: 720px;
+  max-width: 480px;
   margin: auto;
   padding-top: 5vh;
 }
 
+/* 📱 手機直向樣式 */
 @media (max-width: 768px) and (orientation: portrait) {
   #login-wrapper input,
   #login-wrapper button {
@@ -53,6 +55,7 @@ st.markdown("""
   }
 }
 
+/* 📱 手機橫向樣式（iOS Retina） */
 @media screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
   #login-wrapper {
     max-width: 90vw !important;
@@ -60,19 +63,18 @@ st.markdown("""
     padding-right: 5vw !important;
     padding-top: 40px !important;
   }
-
   #login-wrapper input,
   #login-wrapper button {
     font-size: 18px !important;
     height: 42px !important;
     width: 100% !important;
   }
-
   #login-wrapper label {
     font-size: 16px !important;
   }
 }
 
+/* 💻 桌機瀏覽器樣式 */
 @media (min-width: 1025px) {
   #login-wrapper input,
   #login-wrapper button {
@@ -83,28 +85,16 @@ st.markdown("""
   #login-wrapper label {
     font-size: 16px !important;
   }
-}
 
-/* 🔧 修正 Streamlit 自動限制欄寬問題 */
-@media (max-width: 1024px) and (orientation: landscape) {
-  div[data-testid="element-container"] {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: 1 1 auto !important;
+  /* 🧩 修正外層容器最大寬度，避免登入框被拉長 */
+  [data-testid="stVerticalBlock"],
+  [data-testid="element-container"],
+  [data-testid="stForm"],
+  [data-testid="stTextInput"],
+  [class*="stButton"] {
+    max-width: 400px !important;
+    margin: auto !important;
   }
-  div[data-testid="stMarkdown"] {
-    width: 100% !important;
-  }
-}
-@media (max-width: 1024px) and (orientation: landscape) {
-  [data-testid="stVerticalBlock"][width],
-  [data-testid="element-container"][width],
-  [data-testid="stMarkdown"][style*="width: 90px"] {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: 1 1 auto !important;
-  }
-}
 }
 </style>
 """, unsafe_allow_html=True)
