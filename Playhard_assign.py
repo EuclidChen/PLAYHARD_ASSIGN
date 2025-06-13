@@ -35,21 +35,19 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-/* 登入區塊最大寬度與置中 */
+/* 登入畫面置中與縮放 */
 #login-wrapper {
   max-width: 300px;
   margin: 0 auto;
   padding-top: 10vh;
 }
-
-/* 手機螢幕改善輸入框與按鈕樣式 */
 @media (max-width: 768px) {
   div[data-testid="stForm"] input,
   div[data-testid="stForm"] button {
     font-size: 16px !important;
     height: 38px !important;
+    width: 100% !important;
   }
-
   div[data-testid="stForm"] label {
     font-size: 14px !important;
   }
