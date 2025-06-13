@@ -198,8 +198,6 @@ def make_summary_df(year: int, month: int):
 
 # ---------- 4. 登入 ---------- #
 if not st.session_state.get("authenticated"):
-    _, c, _ = st.columns([3, 2, 3])
-    with c:
         st.markdown("<div id='login-wrapper'>", unsafe_allow_html=True)
         st.subheader("🔐 請登入")
         with st.form("login"):
