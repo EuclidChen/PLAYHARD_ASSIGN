@@ -40,21 +40,33 @@ st.markdown("""
   margin: auto;
   padding-top: 5vh;
 }
-#login-wrapper input[type="password"] {
-  padding-right: 36px !important;
+
+/* 手機直向 */
+@media (max-width: 768px) and (orientation: portrait) {
+  #login-wrapper input,
+  #login-wrapper button {
+    font-size: 16px !important;
+    height: 38px !important;
+  }
+  #login-wrapper label {
+    font-size: 14px !important;
+  }
 }
 
-#login-wrapper input[type="password"] {
-  padding-right: 36px !important;
-}
-#login-wrapper input,
-#login-wrapper button {
-  font-size: 16px !important;
-  height: 40px !important;
-  width: 100% !important;
-}
-#login-wrapper label {
-  font-size: 14px !important;
+/* 手機橫向：強制使用桌機排版大小 */
+@media (max-width: 1024px) and (orientation: landscape) {
+  #login-wrapper {
+    max-width: 480px !important;
+    margin: auto !important;
+  }
+  #login-wrapper input,
+  #login-wrapper button {
+    font-size: 18px !important;
+    height: 42px !important;
+  }
+  #login-wrapper label {
+    font-size: 16px !important;
+  }
 }
 </style>
 """, unsafe_allow_html=True)
