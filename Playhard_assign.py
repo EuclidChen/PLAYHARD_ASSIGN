@@ -47,27 +47,14 @@ st.markdown("""
   #login-wrapper button {
     font-size: 16px !important;
     height: 38px !important;
+    width: 100% !important;
   }
   #login-wrapper label {
     font-size: 14px !important;
   }
 }
 
-/* 手機橫向：強制使用桌機排版大小 */
-@media (max-width: 1024px) and (orientation: landscape) {
-  #login-wrapper {
-    max-width: 480px !important;
-    margin: auto !important;
-  }
-  #login-wrapper input,
-  #login-wrapper button {
-    font-size: 18px !important;
-    height: 42px !important;
-  }
-  #login-wrapper label {
-    font-size: 16px !important;
-  }
-}
+/* 手機橫向 */
 @media (max-width: 1024px) and (orientation: landscape) {
   #login-wrapper {
     max-width: 90vw !important;
@@ -75,14 +62,14 @@ st.markdown("""
     padding-right: 5vw !important;
   }
 
-  div[data-testid="stForm"] input,
-  div[data-testid="stForm"] button {
+  #login-wrapper input,
+  #login-wrapper button {
     font-size: 16px !important;
     height: 40px !important;
     width: 100% !important;
   }
 
-  div[data-testid="stForm"] label {
+  #login-wrapper label {
     font-size: 14px !important;
   }
 }
@@ -131,6 +118,9 @@ st.markdown("""
     max-width: 90px !important;
     text-align: center;
   }
+}
+#login-wrapper * {
+  outline: 1px dashed red !important;
 }
 </style>
 """, unsafe_allow_html=True)
