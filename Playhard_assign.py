@@ -84,15 +84,16 @@ st.markdown("""
     font-size: 16px !important;
   }
 }
-</style>
-""", unsafe_allow_html=True)
-st.markdown("""
-<style>
+
+/* 🔧 修正 Streamlit 自動限制欄寬問題 */
 @media (max-width: 1024px) and (orientation: landscape) {
-  main > div.block-container {
-    max-width: 100vw !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+  div[data-testid="element-container"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 auto !important;
+  }
+  div[data-testid="stMarkdown"] {
+    width: 100% !important;
   }
 }
 </style>
