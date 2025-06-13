@@ -42,24 +42,13 @@ st.markdown("""
   padding-top: 10vh;
 }
 @media (max-width: 768px) {
-  #login-wrapper .stTextInput input,
+  #login-wrapper input,
   #login-wrapper .stTextInput,
-  #login-wrapper .stPassword input,
-  #login-wrapper .stPassword {
+  #login-wrapper .stPassword,
+  #login-wrapper button {
     font-size: 14px !important;
+    width: 100% !important;
   }
-  #login-wrapper button { font-size: 14px !important; }
-}
-
-#cal-area-wrapper { overflow-x: auto !important; -webkit-overflow-scrolling: touch; padding-bottom: 8px; display: block; }
-#cal-area { display: inline-block; min-width: 700px; }
-.cal-row { display: flex !important; gap: 2px; }
-.calendar-date { font-weight: bold; font-size: 16px; text-align: center; }
-@media (max-width: 768px) {
-  .calendar-date { font-size: 11px !important; }
-  div[role="combobox"] { font-size: 10px !important; }
-  div[data-testid="column"] { max-width: 64px !important; min-width: 64px !important; }
-  #cal-area .cal-row > div { font-size: 12px !important; width: 64px !important; }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -117,19 +106,18 @@ if not st.session_state.get("authenticated"):
             if st.form_submit_button("登入"):
                 rec = users_df[users_df.username == u]
                 if not rec.empty and bcrypt.verify(p, rec.password_hash.iloc[0]):
-                    st.session_state.update(
-                        {
-                            "authenticated": True,
-                            "username": u,
-                            "display_name": rec.display_name.iloc[0],
-                            "role": rec.role.iloc[0],
-                        }
-                    )
+                    st.session_state.update({
+                        "authenticated": True,
+                        "username": u,
+                        "display_name": rec.display_name.iloc[0],
+                        "role": rec.role.iloc[0],
+                    })
                     st.rerun()
                 else:
                     st.error("帳號或密碼錯誤")
         st.markdown("</div>", unsafe_allow_html=True)
     st.stop()
+
 
 # ---------- 5. 主介面 ---------- #
 st.sidebar.success(f"👋 {st.session_state['display_name']}")
