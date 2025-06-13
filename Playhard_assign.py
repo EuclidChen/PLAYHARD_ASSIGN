@@ -97,26 +97,14 @@ st.markdown("""
   }
 }
 @media (max-width: 1024px) and (orientation: landscape) {
-  div[data-testid="stVerticalBlock"] {
+  [data-testid="stVerticalBlock"][width],
+  [data-testid="element-container"][width],
+  [data-testid="stMarkdown"][style*="width: 90px"] {
     width: 100% !important;
     max-width: 100% !important;
     flex: 1 1 auto !important;
   }
-  div[data-testid="element-container"] {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: 1 1 auto !important;
-  }
-  div[data-testid="stMarkdown"] {
-    width: 100% !important;
-  }
-  div.stHeadingContainer,
-  div[data-testid="stForm"],
-  div[data-testid="stTextInput"],
-  div[class*="stButton"] {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
+}
 }
 </style>
 """, unsafe_allow_html=True)
