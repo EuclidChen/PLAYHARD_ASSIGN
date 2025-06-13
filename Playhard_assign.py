@@ -199,6 +199,7 @@ def make_summary_df(year: int, month: int):
 # ---------- 4. 登入 ---------- #
 if not st.session_state.get("authenticated"):
     st.markdown("<div id='login-wrapper'>", unsafe_allow_html=True)
+
     st.subheader("🔐 請登入")
     with st.form("login"):
         u = st.text_input("帳號")
@@ -216,7 +217,7 @@ if not st.session_state.get("authenticated"):
             else:
                 st.error("帳號或密碼錯誤")
     st.markdown("</div>", unsafe_allow_html=True)
-st.stop()
+    st.stop()
 
 # ---------- 5. 主介面 ---------- #
 st.sidebar.success(f"👋 {st.session_state['display_name']}")
