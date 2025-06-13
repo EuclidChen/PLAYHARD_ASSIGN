@@ -35,6 +35,7 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 # ---------- 登入頁面 CSS ---------- #
 st.markdown("""
 <style>
+/* 預設桌機樣式 */
 #login-wrapper {
   max-width: 480px;
   margin: auto;
@@ -47,30 +48,26 @@ st.markdown("""
   #login-wrapper button {
     font-size: 16px !important;
     height: 38px !important;
-    width: 100% !important;
   }
   #login-wrapper label {
     font-size: 14px !important;
   }
 }
 
-/* 手機橫向 */
-@media (max-width: 1024px) and (orientation: landscape) {
+/* iOS 橫向修正（Retina） */
+@media screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
   #login-wrapper {
     max-width: 90vw !important;
-    padding-left: 5vw !important;
-    padding-right: 5vw !important;
+    padding: 0 5vw !important;
   }
-
   #login-wrapper input,
   #login-wrapper button {
-    font-size: 16px !important;
+    font-size: 17px !important;
     height: 40px !important;
     width: 100% !important;
   }
-
   #login-wrapper label {
-    font-size: 14px !important;
+    font-size: 15px !important;
   }
 }
 </style>
