@@ -104,11 +104,6 @@ st.markdown("""
     flex-wrap: nowrap !important;
     gap: 4px !important;
   }
-  .cal-row > div {
-    min-width: 90px !important;
-    max-width: 90px !important;
-    text-align: center;
-  }
 }
 </style>
 """, unsafe_allow_html=True)
