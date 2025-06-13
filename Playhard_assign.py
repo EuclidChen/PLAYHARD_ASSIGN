@@ -81,6 +81,11 @@ st.markdown("""
     max-width: 90px !important;
     text-align: center;
   }
+  div[data-testid="stDataFrame"] table td {
+    min-width: 90px !important;
+    max-width: 90px !important;
+    text-align: center !important;
+    }    
 }
 </style>
 """, unsafe_allow_html=True)
@@ -89,7 +94,7 @@ st.markdown("""
 def make_summary_df(year: int, month: int):
     _, days = calendar.monthrange(year, month)
     dates = [datetime.date(year, month, d) for d in range(1, days + 1)]
-    date_cols  = [str(d.day) for d in dates] 
+    date_cols = [str(d.day) for d in dates]
     weekday_row = [weekday_map[d.weekday()] for d in dates]
 
     df_shift = pd.DataFrame(
@@ -117,13 +122,18 @@ def make_summary_df(year: int, month: int):
     def color(val):
         if val == "全天":
             return "background-color:#d4edda"
-        if val == "休":
+        elif val == "休":
             return "background-color:#f8d7da"
-        if val in shift_options[2:]:
+        elif val in shift_options[2:]:
             return "background-color:#fff9db"
         return ""
 
-    return df.style.applymap(color, subset=pd.IndexSlice[:, df.columns[2:]])
+    # 對所有欄（包括“星期”）應用樣式
+    styled_df = df.style.applymap(color, subset=pd.IndexSlice[:, df.columns[2:]])
+    # 確保一致的欄寬並居中對齊
+    styled_df.set_properties(**{'min-width': '90px', 'text-align': 'center'}, subset=pd.IndexSlice[:, :])
+
+    return styled_df
 
 # ---------- 4. 登入 ---------- #
 if not st.session_state.get("authenticated"):
