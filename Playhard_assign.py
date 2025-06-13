@@ -86,6 +86,17 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
+st.markdown("""
+<style>
+@media (max-width: 1024px) and (orientation: landscape) {
+  main > div.block-container {
+    max-width: 100vw !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ---------- 排班頁面 CSS ---------- #
 st.markdown("""
