@@ -81,11 +81,24 @@ st.markdown("""
     max-width: 90px !important;
     text-align: center;
   }
-  div[data-testid="stDataFrame"] table td {
+  div[data-testid="stMarkdownContainer"] .cal-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+    justify-content: space-between !important;
+}
+
+div[data-testid="stMarkdownContainer"] .cal-row > div {
     min-width: 90px !important;
     max-width: 90px !important;
     text-align: center !important;
-    }    
+    box-sizing: border-box !important;
+}
+
+.calendar-date {
+    padding: 4px 0 !important;
+    border-radius: 6px !important;
+}
 }
 </style>
 """, unsafe_allow_html=True)
@@ -191,15 +204,19 @@ with tab_my:
         st.markdown(f"### 📆 {year} 年 {month} 月排班表")
         st.markdown("<div id='cal-area-wrapper'><div id='cal-area'>", unsafe_allow_html=True)
 
-        st.markdown("<div class='cal-row'>", unsafe_allow_html=True)
+        # 渲染“星期”行
+        st.markdown("<div class='cal-row' style='margin-bottom: 4px;'>", unsafe_allow_html=True)
+        cols = st.columns(7)
         for i, lbl in enumerate(weekday_map):
             bg, fg = ("#004085", "#fff") if i in (0, 6) else ("#fff", "#000")
-            st.markdown(
-                f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;width:100px;text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
-                unsafe_allow_html=True
-            )
+            with cols[i]:
+                st.markdown(
+                    f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;width:90px;text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
+                    unsafe_allow_html=True
+                )
         st.markdown("</div>", unsafe_allow_html=True)
 
+        # 渲染日期和下拉選單
         shift_data = {}
         for wk in cal.monthdatescalendar(year, month):
             st.markdown("<div class='cal-row'>", unsafe_allow_html=True)
@@ -207,16 +224,16 @@ with tab_my:
             for i, d in enumerate(wk):
                 with cols[i]:
                     if d.month != month:
-                        st.markdown("<div style='padding:30px'>&nbsp;</div>", unsafe_allow_html=True)
+                        st.markdown("<div style='padding:30px'> </div>", unsafe_allow_html=True)
                         continue
                     key = d.isoformat()
                     init = preset.get(key, "休")
                     bg = color_map.get(init, "#fff9db")
                     st.markdown(
-                        f"<div class='calendar-date' style='background:{bg};border-radius:6px;padding:4px 0'>{d.day}</div>",
+                        f"<div class='calendar-date' style='background:{bg};border-radius:6px;padding:4px 0;width:90px;text-align:center'>{d.day}</div>",
                         unsafe_allow_html=True
                     )
-                    val = st.selectbox("\u200b", shift_options, key=key, index=shift_options.index(init), label_visibility="collapsed")
+                    val = st.selectbox("\u200b", shift_options, key=key, index=shift_options.index(init), label_visibility="collapsed", key=f"select_{key}")
                     shift_data[key] = val
             st.markdown("</div>", unsafe_allow_html=True)
 
