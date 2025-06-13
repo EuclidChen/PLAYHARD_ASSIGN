@@ -99,11 +99,6 @@ st.markdown("""
     width: 12px !important;
     height: 12px !important;
   }
-  .cal-row {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: 4px !important;
-  }
 }
 </style>
 """, unsafe_allow_html=True)
