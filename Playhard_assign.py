@@ -35,27 +35,6 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-#login-wrapper {
-  max-width: 280px;
-  margin: 0 auto;
-  padding-top: 10vh;
-}
-@media (max-width: 768px) {
-  #login-wrapper input,
-  #login-wrapper .stTextInput,
-  #login-wrapper .stPassword,
-  #login-wrapper button {
-    font-size: 14px !important;
-    width: 100% !important;
-  }
-  #login-wrapper label {
-    font-size: 13px !important;
-  }
-  /* 修正密碼輸入框眼睛位置 */
-  div[data-testid="stPassword"] button {
-    transform: translateY(4px);
-  }
-}
 @media (max-width: 1024px) and (orientation: landscape) {
   #cal-area-wrapper {
     overflow-x: auto !important;
@@ -68,7 +47,6 @@ st.markdown("""
     text-align: center;
   }
 
-  /* 增加單日欄寬度與選單字體 */
   div[data-testid="column"] {
     min-width: 90px !important;
     max-width: 90px !important;
@@ -91,11 +69,17 @@ st.markdown("""
     width: 12px !important;
     height: 12px !important;
   }
-  /* 修正星期列堆疊問題 */
+
   .cal-row {
     display: flex !important;
-    min-width: fit-content;
-    gap: 4px;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+  }
+
+  .cal-row > div {
+    min-width: 90px !important;
+    max-width: 90px !important;
+    text-align: center;
   }
 }
 </style>
@@ -193,7 +177,7 @@ with tab_my:
     df_me = df_all[mask]
     preset = dict(zip(df_me["date"].dt.strftime("%Y-%m-%d"), df_me["shift"]))
 
-    cal = calendar.Calendar(firstweekday=6)
+    cal = calendar.Calendar(firstweekday=0)
 
     with st.form("my_form"):
         st.markdown(f"### 📆 {year} 年 {month} 月排班表")
