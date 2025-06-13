@@ -68,6 +68,24 @@ st.markdown("""
     font-size: 16px !important;
   }
 }
+@media (max-width: 1024px) and (orientation: landscape) {
+  #login-wrapper {
+    max-width: 90vw !important;
+    padding-left: 5vw !important;
+    padding-right: 5vw !important;
+  }
+
+  div[data-testid="stForm"] input,
+  div[data-testid="stForm"] button {
+    font-size: 16px !important;
+    height: 40px !important;
+    width: 100% !important;
+  }
+
+  div[data-testid="stForm"] label {
+    font-size: 14px !important;
+  }
+}
 </style>
 """, unsafe_allow_html=True)
 
