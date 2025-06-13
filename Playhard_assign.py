@@ -57,7 +57,7 @@ st.markdown("""
 /* iOS 橫向修正（Retina） */
 @media screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
   #login-wrapper {
-    max-width: 90vw !important;
+    max-width: 450vw !important;
     padding: 0 5vw !important;
   }
   #login-wrapper input,
