@@ -33,7 +33,29 @@ st.set_page_config(page_title="玩硬劇本排班系統", layout="wide")
 st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1">', unsafe_allow_html=True)
 
 # ---------- 2. 共用 CSS ---------- #
-/* 僅手機橫向：改善選項不裁切、日曆格放大 */
+st.markdown("""
+<style>
+#login-wrapper {
+  max-width: 280px;
+  margin: 0 auto;
+  padding-top: 10vh;
+}
+@media (max-width: 768px) {
+  #login-wrapper input,
+  #login-wrapper .stTextInput,
+  #login-wrapper .stPassword,
+  #login-wrapper button {
+    font-size: 14px !important;
+    width: 100% !important;
+  }
+  #login-wrapper label {
+    font-size: 13px !important;
+  }
+  /* 修正密碼輸入框眼睛位置 */
+  div[data-testid="stPassword"] button {
+    transform: translateY(4px);
+  }
+}
 @media (max-width: 1024px) and (orientation: landscape) {
   #cal-area-wrapper {
     overflow-x: auto !important;
@@ -70,6 +92,8 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
     height: 12px !important;
   }
 }
+</style>
+""", unsafe_allow_html=True)
 
 # ---------- 3. 產生總表 Styler ---------- #
 def make_summary_df(year: int, month: int):
