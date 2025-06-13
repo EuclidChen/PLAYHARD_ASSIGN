@@ -36,7 +36,7 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 st.markdown("""
 <style>
 #login-wrapper {
-  max-width: 480px;
+  max-width: 360px;
   margin: auto;
   padding-top: 5vh;
 }
