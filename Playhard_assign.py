@@ -35,14 +35,13 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 # ---------- 登入頁面 CSS ---------- #
 st.markdown("""
 <style>
-/* 📌 預設登入容器寬度（桌機） */
 #login-wrapper {
   max-width: 480px;
   margin: auto;
   padding-top: 5vh;
 }
 
-/* 📱 手機直向樣式 */
+/* 📱 手機直向 */
 @media (max-width: 768px) and (orientation: portrait) {
   #login-wrapper input,
   #login-wrapper button {
@@ -55,45 +54,41 @@ st.markdown("""
   }
 }
 
-/* 📱 手機橫向樣式（iOS Retina） */
+/* 📱 手機橫向 (iOS Retina) */
 @media screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
   #login-wrapper {
     max-width: 90vw !important;
-    padding-left: 5vw !important;
-    padding-right: 5vw !important;
+    padding: 0 5vw !important;
     padding-top: 40px !important;
   }
+
   #login-wrapper input,
   #login-wrapper button {
     font-size: 18px !important;
     height: 42px !important;
     width: 100% !important;
   }
+
   #login-wrapper label {
     font-size: 16px !important;
   }
 }
 
-/* 💻 桌機瀏覽器樣式 */
+/* 💻 桌機瀏覽器 */
 @media (min-width: 1025px) {
+  #login-wrapper {
+    max-width: 400px !important;
+  }
+
   #login-wrapper input,
   #login-wrapper button {
     font-size: 18px !important;
     height: 42px !important;
     width: 100% !important;
   }
+
   #login-wrapper label {
     font-size: 16px !important;
-  }
-
-  /* 🧩 修正外層容器最大寬度，避免登入框被拉長 */
-  [data-testid="stVerticalBlock"],
-  [data-testid="element-container"],
-  [data-testid="stForm"],
-  [data-testid="stTextInput"],
-  [class*="stButton"] {
-    max-width: 400px !important;
-    margin: auto !important;
   }
 }
 </style>
