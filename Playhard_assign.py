@@ -95,50 +95,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------- 排班頁面 CSS ---------- #
-st.markdown("""
-<style>
-@media (max-width: 1024px) and (orientation: landscape) {
-  #cal-area-wrapper {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-  #cal-area .calendar-date {
-    font-size: 13px !important;
-    padding: 2px 0 !important;
-    text-align: center;
-  }
-  div[data-testid="column"] {
-    min-width: 90px !important;
-    max-width: 90px !important;
-    flex: 0 0 90px !important;
-  }
-  div[role="combobox"] {
-    font-size: 14px !important;
-    padding: 4px !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-  }
-  li[role="option"] {
-    font-size: 14px !important;
-  }
-  svg {
-    width: 12px !important;
-    height: 12px !important;
-  }
-  .cal-row {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: 4px !important;
-  }
-  .cal-row > div {
-    min-width: 90px !important;
-    max-width: 90px !important;
-    text-align: center;
-  }
-}
-</style>
-""", unsafe_allow_html=True)
 
 
 # ---------- 3. 產生總表 Styler ---------- #
