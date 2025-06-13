@@ -35,39 +35,57 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 # ---------- 登入頁面 CSS ---------- #
 st.markdown("""
 <style>
-/* 預設桌機樣式 */
+/* === 登入框整體設定 === */
 #login-wrapper {
   max-width: 480px;
   margin: auto;
   padding-top: 5vh;
 }
 
-/* 手機直向 */
+/* === 手機直向樣式 === */
 @media (max-width: 768px) and (orientation: portrait) {
   #login-wrapper input,
   #login-wrapper button {
     font-size: 16px !important;
     height: 38px !important;
+    width: 100% !important;
   }
   #login-wrapper label {
     font-size: 14px !important;
   }
 }
 
-/* iOS 橫向修正（Retina） */
+/* === 手機橫向 (含 iOS Retina) 專用修正 === */
 @media screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
   #login-wrapper {
-    max-width: 450vw !important;
-    padding: 0 5vw !important;
+    max-width: 90vw !important;
+    padding-left: 5vw !important;
+    padding-right: 5vw !important;
+    padding-top: 40px !important;
   }
+
   #login-wrapper input,
   #login-wrapper button {
-    font-size: 17px !important;
-    height: 40px !important;
+    font-size: 18px !important;
+    height: 42px !important;
+    width: 100% !important;
+  }
+
+  #login-wrapper label {
+    font-size: 16px !important;
+  }
+}
+
+/* === 桌機瀏覽器設定（寬螢幕）=== */
+@media (min-width: 1025px) {
+  #login-wrapper input,
+  #login-wrapper button {
+    font-size: 18px !important;
+    height: 42px !important;
     width: 100% !important;
   }
   #login-wrapper label {
-    font-size: 15px !important;
+    font-size: 16px !important;
   }
 }
 </style>
