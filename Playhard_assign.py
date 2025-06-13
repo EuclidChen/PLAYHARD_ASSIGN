@@ -16,7 +16,7 @@ scope = [
 creds_dict = json.loads(st.secrets["GOOGLE_CREDS_JSON"])
 sheet_key  = st.secrets["SHEET_KEY"]
 
-gc = gspread.authorize(More actions
+gc = gspread.authorize(
     ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 )
 sh = gc.open_by_key(sheet_key)
