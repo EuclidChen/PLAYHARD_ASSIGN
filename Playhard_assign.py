@@ -41,7 +41,7 @@ st.markdown("""
   padding-top: 5vh;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) and (orientation: portrait) {
   #login-wrapper input,
   #login-wrapper button {
     font-size: 16px !important;
@@ -50,6 +50,26 @@ st.markdown("""
   }
   #login-wrapper label {
     font-size: 14px !important;
+  }
+}
+
+@media screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+  #login-wrapper {
+    max-width: 90vw !important;
+    padding-left: 5vw !important;
+    padding-right: 5vw !important;
+    padding-top: 40px !important;
+  }
+
+  #login-wrapper input,
+  #login-wrapper button {
+    font-size: 18px !important;
+    height: 42px !important;
+    width: 100% !important;
+  }
+
+  #login-wrapper label {
+    font-size: 16px !important;
   }
 }
 
@@ -99,9 +119,20 @@ st.markdown("""
     width: 12px !important;
     height: 12px !important;
   }
+  .cal-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+  }
+  .cal-row > div {
+    min-width: 90px !important;
+    max-width: 90px !important;
+    text-align: center;
+  }
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 # ---------- 3. 產生總表 Styler ---------- #More actions
 def make_summary_df(year: int, month: int):
