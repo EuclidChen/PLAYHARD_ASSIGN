@@ -91,6 +91,12 @@ st.markdown("""
     width: 12px !important;
     height: 12px !important;
   }
+  /* 修正星期列堆疊問題 */
+  .cal-row {
+    display: flex !important;
+    min-width: fit-content;
+    gap: 4px;
+  }
 }
 </style>
 """, unsafe_allow_html=True)
