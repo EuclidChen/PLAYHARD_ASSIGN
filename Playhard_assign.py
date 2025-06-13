@@ -39,10 +39,14 @@ st.markdown("""
 #cal-area { display: inline-block; min-width: 700px; }
 .cal-row { display: flex !important; gap: 2px; }
 .calendar-date { font-weight: bold; font-size: 16px; text-align: center; }
-@media (max-width: 1024px) {
-  .calendar-date { font-size: 13px !important; }
-  div[role="combobox"] { font-size: 12px !important; }
-  div[data-testid="column"] { max-width: 80px !important; min-width: 80px !important; }
+@media (max-width: 768px) {
+  .calendar-date { font-size: 11px !important; }
+  div[role="combobox"] { font-size: 10px !important; }
+  div[data-testid="column"] { max-width: 64px !important; min-width: 64px !important; }
+  #cal-area .cal-row > div { font-size: 12px !important; width: 64px !important; }
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ---------- 3. 產生總表 Styler ---------- #
 def make_summary_df(year: int, month: int):
