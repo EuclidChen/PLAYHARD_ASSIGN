@@ -32,26 +32,70 @@ weekday_map   = ["日", "一", "二", "三", "四", "五", "六"]
 st.set_page_config(page_title="玩硬劇本排班系統", layout="wide")
 st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1">', unsafe_allow_html=True)
 
-# ---------- 2. 共用 CSS ---------- #
+# ---------- 登入頁面 CSS ---------- #
 st.markdown("""
 <style>
-/* 共用欄寬 */
-div[data-testid="column"]{flex:1 1 70px!important;max-width:70px!important}
-@media (max-width:480px){
-  div[data-testid="column"]{flex:1 1 60px!important;max-width:60px!important}
+#login-wrapper {
+  max-width: 480px;
+  margin: auto;
+  padding-top: 5vh;
 }
+@media (max-width: 768px) {
+  div[data-testid="stForm"] input,
+  div[data-testid="stForm"] button {
+    font-size: 16px !important;
+    height: 38px !important;
+  }
+  div[data-testid="stForm"] label {
+    font-size: 14px !important;
+  }
+}
+</style>
+""", unsafe_allow_html=True)
 
-/* Selectbox 字體大小 */
-div[data-testid="stSelectbox"]>div{width:100%!important;font-size:14px!important}
-
-/* 日期字體 */
-div.calendar-date{font-size:16px!important;font-weight:600}
-
-/* 登入輸入框大小 */
-div[data-testid="stTextInput"] input{font-size:18px;padding:12px 14px}
-
-/* 登入版面寬度置中 */
-#login-wrapper{max-width:480px;margin:auto}
+# ---------- 排班頁面 CSS ---------- #
+st.markdown("""
+<style>
+@media (max-width: 1024px) and (orientation: landscape) {
+  #cal-area-wrapper {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  #cal-area .calendar-date {
+    font-size: 13px !important;
+    padding: 2px 0 !important;
+    text-align: center;
+  }
+  div[data-testid="column"] {
+    min-width: 90px !important;
+    max-width: 90px !important;
+    flex: 0 0 90px !important;
+  }
+  div[role="combobox"] {
+    font-size: 14px !important;
+    padding: 4px !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+  li[role="option"] {
+    font-size: 14px !important;
+  }
+  svg {
+    width: 12px !important;
+    height: 12px !important;
+  }
+  .cal-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+  }
+  .cal-row > div {
+    min-width: 90px !important;
+    max-width: 90px !important;
+    text-align: center;
+  }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -59,6 +103,7 @@ div[data-testid="stTextInput"] input{font-size:18px;padding:12px 14px}
 def make_summary_df(year: int, month: int):
     _, days = calendar.monthrange(year, month)
     dates = [datetime.date(year, month, d) for d in range(1, days + 1)]
+    date_cols  = [str(d.day) for d in dates] 
     weekday_row = [weekday_map[d.weekday()] for d in dates]
 
     df_shift = pd.DataFrame(
@@ -76,9 +121,12 @@ def make_summary_df(year: int, month: int):
             one_row.append(hit.iloc[0]["shift"] if not hit.empty else "休")
         rows.append(one_row)
 
-    cols = ["職稱", "姓名"] + [d.day for d in dates]
+    cols = ["職稱", "姓名"] + date_cols
     df = pd.DataFrame(rows, columns=cols)
     df = pd.concat([pd.DataFrame([["", "星期"] + weekday_row], columns=cols), df])
+
+    df.columns = df.columns.str.strip().astype(str)
+    df.index = range(len(df))
 
     def color(val):
         if val == "全天":
@@ -89,7 +137,7 @@ def make_summary_df(year: int, month: int):
             return "background-color:#fff9db"
         return ""
 
-    return df.style.applymap(color, subset=pd.IndexSlice[:, 2:])
+    return df.style.applymap(color, subset=pd.IndexSlice[:, df.columns[2:]])
 
 # ---------- 4. 登入 ---------- #
 if not st.session_state.get("authenticated"):
@@ -127,34 +175,38 @@ tab_my, tab_sum = st.tabs(["🧑‍💼我的排班", "🗂️員工排班總表
 # === 5-1 我的排班 === #
 with tab_my:
     today = datetime.date.today()
-    year = st.selectbox("年份", list(range(today.year - 1, today.year + 2)), 1, key="y")
-    month = st.selectbox("月份", list(range(1, 13)), today.month - 1, key="m")
+    year = st.selectbox("年份", list(range(today.year - 1, today.year + 2)), index=1)
+    month = st.selectbox("月份", list(range(1, 13)), index=today.month - 1)
 
-    df_all = (
-        pd.DataFrame(ws_shift.get_all_values()[1:], columns=["date", "shift", "user", "status"])
-        .assign(date=lambda d: pd.to_datetime(d["date"]))
+    df_all = pd.DataFrame(ws_shift.get_all_values()[1:], columns=["date", "shift", "user", "status"])
+    df_all["date"] = pd.to_datetime(df_all["date"])
+
+    mask = (
+        (df_all["user"] == st.session_state.get("username", "")) &
+        (df_all["date"].dt.year == year) &
+        (df_all["date"].dt.month == month)
     )
-    mask = (df_all["user"] == st.session_state["username"]) & (
-        df_all["date"].dt.year == year
-    ) & (df_all["date"].dt.month == month)
     df_me = df_all[mask]
     preset = dict(zip(df_me["date"].dt.strftime("%Y-%m-%d"), df_me["shift"]))
 
     cal = calendar.Calendar(firstweekday=6)
+
     with st.form("my_form"):
         st.markdown(f"### 📆 {year} 年 {month} 月排班表")
-        cols_week = st.columns([1] * 7)
-        for i, l in enumerate(["日", "一", "二", "三", "四", "五", "六"]):
+        st.markdown("<div id='cal-area-wrapper'><div id='cal-area'>", unsafe_allow_html=True)
+
+        cols_week = st.columns(7)
+        for i, lbl in enumerate(["日", "一", "二", "三", "四", "五", "六"]):
             bg, fg = ("#004085", "#fff") if i in (0, 6) else ("#fff", "#000")
             cols_week[i].markdown(
-                f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;"
-                f"text-align:center;font-size:16px'><strong>{l}</strong></div>",
-                unsafe_allow_html=True,
+                f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
+                unsafe_allow_html=True
             )
 
         shift_data = {}
         for wk in cal.monthdatescalendar(year, month):
-            cols = st.columns([1] * 7)
+            st.markdown("<div class='cal-row'>", unsafe_allow_html=True)
+            cols = st.columns(7)
             for i, d in enumerate(wk):
                 with cols[i]:
                     if d.month != month:
@@ -164,18 +216,14 @@ with tab_my:
                     init = preset.get(key, "休")
                     bg = color_map.get(init, "#fff9db")
                     st.markdown(
-                        f"<div class='calendar-date' style='background:{bg};border-radius:6px;"
-                        f"text-align:center;padding:4px 0'>{d.day}</div>",
-                        unsafe_allow_html=True,
+                        f"<div class='calendar-date' style='background:{bg};border-radius:6px;padding:4px 0'>{d.day}</div>",
+                        unsafe_allow_html=True
                     )
-                    val = st.selectbox(
-                        "\u200b",
-                        shift_options,
-                        key=key,
-                        index=shift_options.index(init),
-                        label_visibility="collapsed",
-                    )
+                    val = st.selectbox("\u200b", shift_options, key=key, index=shift_options.index(init), label_visibility="collapsed")
                     shift_data[key] = val
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        st.markdown("</div></div>", unsafe_allow_html=True)
 
         if st.form_submit_button("💾 儲存排班"):
             for day, s in shift_data.items():
@@ -183,9 +231,7 @@ with tab_my:
                 if not hit.empty:
                     ws_shift.update_cell(hit.index[0] + 2, 2, s)
                 else:
-                    ws_shift.append_row(
-                        [day, s, st.session_state["username"], "scheduled"]
-                    )
+                    ws_shift.append_row([day, s, st.session_state["username"], "scheduled"])
             st.success("✅ 已更新"); st.rerun()
 
 # === 5-2 月總表（admin 可見） === #
