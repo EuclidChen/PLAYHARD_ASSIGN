@@ -35,15 +35,13 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 # ---------- 登入頁面 CSS ---------- #
 st.markdown("""
 <style>
-/* === 登入框整體設定 === */
 #login-wrapper {
   max-width: 480px;
   margin: auto;
   padding-top: 5vh;
 }
 
-/* === 手機直向樣式 === */
-@media (max-width: 768px) and (orientation: portrait) {
+@media (max-width: 1024px) {
   #login-wrapper input,
   #login-wrapper button {
     font-size: 16px !important;
@@ -55,28 +53,6 @@ st.markdown("""
   }
 }
 
-/* === 手機橫向 (含 iOS Retina) 專用修正 === */
-@media screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
-  #login-wrapper {
-    max-width: 90vw !important;
-    padding-left: 5vw !important;
-    padding-right: 5vw !important;
-    padding-top: 40px !important;
-  }
-
-  #login-wrapper input,
-  #login-wrapper button {
-    font-size: 18px !important;
-    height: 42px !important;
-    width: 100% !important;
-  }
-
-  #login-wrapper label {
-    font-size: 16px !important;
-  }
-}
-
-/* === 桌機瀏覽器設定（寬螢幕）=== */
 @media (min-width: 1025px) {
   #login-wrapper input,
   #login-wrapper button {
@@ -134,9 +110,6 @@ st.markdown("""
     text-align: center;
   }
 }
-#login-wrapper * {
-  outline: 1px dashed red !important;
-}
 </style>
 """, unsafe_allow_html=True)
 
@@ -182,13 +155,7 @@ def make_summary_df(year: int, month: int):
 
 # ---------- 4. 登入 ---------- #
 if not st.session_state.get("authenticated"):
-    is_mobile_landscape = st.runtime.scriptrunner.is_running_with_streamlit and st.query_params.get("mobile") == "landscape"
-    if is_mobile_landscape:
-        col = st.container()
-    else:
-        _, col, _ = st.columns([3, 2, 3])
-
-    with col:
+    with st.container():
         st.markdown("<div id='login-wrapper'>", unsafe_allow_html=True)
         st.subheader("🔐 請登入")
         with st.form("login"):
