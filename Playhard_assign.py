@@ -27,7 +27,7 @@ ws_user  = sh.worksheet("users")
 users_df = pd.DataFrame(ws_user.get_all_values()[1:], columns=ws_user.row_values(1))
 shift_options = ["休", "全天", "早", "午", "晚", "早午", "午晚", "早晚"]
 color_map     = {"全天": "#d4edda", "休": "#f8d7da"}   # 其他→黃
-weekday_map   = ["日", "一", "二", "三", "四", "五", "六"]
+weekday_map   = ["一", "二", "三", "四", "五", "六", "日"]
 
 st.set_page_config(page_title="玩硬劇本排班系統", layout="wide")
 st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1">', unsafe_allow_html=True)
@@ -175,14 +175,14 @@ with tab_my:
     df_me = df_all[mask]
     preset = dict(zip(df_me["date"].dt.strftime("%Y-%m-%d"), df_me["shift"]))
 
-    cal = calendar.Calendar(firstweekday=6)  # 改為星期日開始
+    cal = calendar.Calendar(firstweekday=6)  # 星期日開頭
 
     with st.form("my_form"):
         st.markdown(f"### 📆 {year} 年 {month} 月排班表")
         st.markdown("<div id='cal-area-wrapper'><div id='cal-area'>", unsafe_allow_html=True)
 
         st.markdown("<div class='cal-row'>", unsafe_allow_html=True)
-        for i, lbl in enumerate(["日", "一", "二", "三", "四", "五", "六"]):
+        for i, lbl in enumerate(weekday_map):
             bg, fg = ("#004085", "#fff") if i in (0, 6) else ("#fff", "#000")
             st.markdown(
                 f"<div style='background:{bg};color:{fg};padding:6px 0;border-radius:4px;width:100px;text-align:center;font-size:16px'><strong>{lbl}</strong></div>",
