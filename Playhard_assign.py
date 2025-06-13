@@ -35,21 +35,25 @@ st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1"
 # ---------- 2. 共用 CSS ---------- #
 st.markdown("""
 <style>
-/* 登入畫面置中與縮放 */
 #login-wrapper {
-  max-width: 300px;
+  max-width: 280px;
   margin: 0 auto;
   padding-top: 10vh;
 }
 @media (max-width: 768px) {
-  div[data-testid="stForm"] input,
-  div[data-testid="stForm"] button {
-    font-size: 16px !important;
-    height: 38px !important;
+  #login-wrapper input,
+  #login-wrapper .stTextInput,
+  #login-wrapper .stPassword,
+  #login-wrapper button {
+    font-size: 14px !important;
     width: 100% !important;
   }
-  div[data-testid="stForm"] label {
-    font-size: 14px !important;
+  #login-wrapper label {
+    font-size: 13px !important;
+  }
+  /* 修正密碼輸入框眼睛位置 */
+  div[data-testid="stPassword"] button {
+    transform: translateY(4px);
   }
 }
 </style>
