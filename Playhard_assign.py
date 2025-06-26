@@ -33,135 +33,108 @@ st.set_page_config(page_title="玩硬劇本排班系統", layout="wide")
 st.markdown('<meta name="viewport" content="width=device-width, initial-scale=1">', unsafe_allow_html=True)
 
 # ---------- 登入頁面 CSS ---------- #
-st.markdown("""
-<style>
-#login-wrapper {
-  max-width: 480px;
-  margin: auto;
-  padding-top: 5vh;
-}
+if not st.session_state.get("authenticated"):
+    st.markdown("""
+    <style>
+    /* 登入容器置中與寬度控制 */
+    #login-wrapper {
+      max-width: 400px;
+      margin: auto;
+      padding-top: 5vh;
+    }
+    /* 手機直向 */
+    @media (max-width: 768px) and (orientation: portrait) {
+      #login-wrapper input,
+      #login-wrapper button {
+        font-size: 16px !important;
+        height: 38px !important;
+        width: 100% !important;
+      }
+      #login-wrapper label {
+        font-size: 14px !important;
+      }
+    }
+    /* 手機橫向 (iOS Retina) */
+    @media screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
+      #login-wrapper {
+        max-width: 90vw !important;
+        padding: 0 5vw 40px 5vw !important;
+      }
+      #login-wrapper input,
+      #login-wrapper button {
+        font-size: 18px !important;
+        height: 42px !important;
+        width: 100% !important;
+      }
+      #login-wrapper label {
+        font-size: 16px !important;
+      }
+    }
+    /* 桌機瀏覽 */
+    @media (min-width: 1025px) {
+      div[data-testid="stVerticalBlock"] > div[data-testid="element-container"] {
+        display: flex;
+        justify-content: center;
+      }
+      #login-wrapper {
+        max-width: 400px !important;
+        width: 100% !important;
+      }
+      #login-wrapper input,
+      #login-wrapper button {
+        font-size: 18px !important;
+        height: 42px !important;
+        width: 100% !important;
+      }
+      #login-wrapper label {
+        font-size: 16px !important;
+      }
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-@media (max-width: 768px) and (orientation: portrait) {
-  #login-wrapper input,
-  #login-wrapper button {
-    font-size: 16px !important;
-    height: 38px !important;
-    width: 100% !important;
-  }
-  #login-wrapper label {
-    font-size: 14px !important;
-  }
-}
+# 排班頁面樣式 (驗證後生效)
+else:
+    st.markdown("""
+    <style>
+    /* 外層容器橫向滾動 */
+    #cal-area-wrapper {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* 星期列與項目保持橫向 */
+    .cal-row {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      gap: 4px !important;
+      min-width: max-content !important;
+    }
+    /* 日期格固定寬度 */
+    .cal-row > div {
+      min-width: 90px !important;
+      max-width: 90px !important;
+      flex: 0 0 90px !important;
+      text-align: center !important;
+    }
+    /* 日期與選單字體微調 */
+    .calendar-date {
+      font-size: 13px !important;
+      padding: 2px 0 !important;
+    }
+    div[role="combobox"] {
+      font-size: 13px !important;
+    }
+    li[role="option"] {
+      font-size: 13px !important;
+    }
+    @media (max-width: 1024px) and (orientation: landscape) {
+      /* 手機橫向小調 */
+      .calendar-date { font-size: 12px !important; }
+      div[role="combobox"] { font-size: 12px !important; }
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-@media screen and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 2) {
-  #login-wrapper {
-    max-width: 90vw !important;
-    padding-left: 5vw !important;
-    padding-right: 5vw !important;
-    padding-top: 40px !important;
-  }
-
-  #login-wrapper input,
-  #login-wrapper button {
-    font-size: 18px !important;
-    height: 42px !important;
-    width: 100% !important;
-  }
-
-  #login-wrapper label {
-    font-size: 16px !important;
-  }
-}
-
-@media (min-width: 1025px) {
-  /* 強制 login wrapper 寬度與置中 */
-  div[data-testid="stVerticalBlock"] > div[data-testid="element-container"] {
-    display: flex;
-    justify-content: center;
-  }
-  #login-wrapper {
-    max-width: 400px !important;
-    width: 100% !important;
-  }
-  #login-wrapper input,
-  #login-wrapper button {
-    font-size: 18px !important;
-    height: 42px !important;
-    width: 100% !important;
-  }
-  #login-wrapper label {
-    font-size: 16px !important;
-  }
-}
-
-/* 🔧 修正 Streamlit 自動限制欄寬問題 */
-@media (max-width: 1024px) and (orientation: landscape) {
-  div[data-testid="element-container"] {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: 1 1 auto !important;
-  }
-  div[data-testid="stMarkdown"] {
-    width: 100% !important;
-  }
-}
-@media (max-width: 1024px) and (orientation: landscape) {
-  [data-testid="stVerticalBlock"][width],
-  [data-testid="element-container"][width],
-  [data-testid="stMarkdown"][style*="width: 90px"] {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: 1 1 auto !important;
-  }
-}
-</style>
-""", unsafe_allow_html=True)
-
-# ---------- 排班頁面 CSS ---------- #
-st.markdown("""
-<style>
-@media (max-width: 1024px) and (orientation: landscape) {
-  #cal-area-wrapper {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-  #cal-area .calendar-date {
-    font-size: 13px !important;
-    padding: 2px 0 !important;
-    text-align: center;
-  }
-  div[data-testid="column"] {
-    min-width: 90px !important;
-    max-width: 90px !important;
-    flex: 0 0 90px !important;
-  }
-  div[role="combobox"] {
-    font-size: 14px !important;
-    padding: 4px !important;
-    white-space: nowrap !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-  }
-  li[role="option"] {
-    font-size: 14px !important;
-  }
-  svg {
-    width: 12px !important;
-    height: 12px !important;
-  }
-  .cal-row {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: 4px !important;
-  }
-  .cal-row > div {
-    min-width: 90px !important;
-    max-width: 90px !important;
-    text-align: center;
-  }
-}
-</style>
-""", unsafe_allow_html=True)
 
 
 # ---------- 3. 產生總表 Styler ---------- #
